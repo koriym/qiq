@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Qiq;
 
 use Qiq\Compiler\Compiler;
@@ -40,10 +42,10 @@ class TemplateLocator
         return false;
     }
 
-    public function get(string $name) : string
+    public function get(TemplateCore $template, string $name) : string
     {
         if ($this->has($name)) {
-            return $this->compile($name);
+            return $this->compile($template, $name);
         }
 
         list ($collection, $name) = $this->split($name);
@@ -103,10 +105,11 @@ class TemplateLocator
         $this->compiler->clear();
     }
 
-    protected function compile(string $name) : string
+    protected function compile(TemplateCore $template, string $name) : string
     {
         if (! isset($this->compiled[$name])) {
             $this->compiled[$name] = ($this->compiler)(
+                $template,
                 $this->found[$name]
             );
         }

@@ -1,3 +1,3 @@
-<?= "before -- "
+<?= "{$title} -- before -- "
    . $this->getContent()
    . " -- after";

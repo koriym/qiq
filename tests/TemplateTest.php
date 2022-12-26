@@ -10,22 +10,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     protected function setUp() : void
     {
         $this->template = Template::new();
-
-        $helperLocator = $this->template->getHelperLocator();
-
-        $helperLocator->set('hello', function() {
-            return function ($name) {
-                return "Hello {$name}!";
-            };
-        });
-
         $templateLocator = $this->template->getTemplateLocator();
         $templateLocator->setPaths([__DIR__ . '/templates']);
-    }
-
-    public function testStaticNew()
-    {
-        $this->assertInstanceOf(Template::CLASS, Template::new());
     }
 
     public function testMagicMethods()
@@ -38,17 +24,22 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         unset($this->template->foo);
         $this->assertFalse(isset($this->template->foo));
-
-        $actual = $this->template->hello('Helper');
-        $this->assertSame('Hello Helper!', $actual);
     }
 
     public function testGetters()
     {
-        $this->assertInstanceOf(TemplateLocator::CLASS, $this->template->getTemplateLocator());
-        $this->assertInstanceOf(HelperLocator::CLASS, $this->template->getHelperLocator());
+        $this->assertInstanceOf(TemplateLocator::class, $this->template->getTemplateLocator());
+        $this->assertInstanceOf(HelperLocator::class, $this->template->getHelperLocator());
+        $this->assertInstanceOf(Indent::class, $this->template->getHelper(Indent::class));
     }
 
+    public function testSetIndent()
+    {
+        $expect = 'foo';
+        $this->template->setIndent($expect);
+        $actual = $this->template->getHelper(Indent::class)->get();
+        $this->assertSame($expect, $actual);
+    }
     public function testSetAddAndGetData()
     {
         $data = ['foo' => 'bar'];
@@ -66,7 +57,10 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testInvokeOneStep()
     {
-        $this->template->setData(['name' => 'Index']);
+        $this->template->setData([
+            'name' => 'Index',
+            'title' => 'Title'
+        ]);
         $this->template->setView('index');
         $actual = ($this->template)();
         $expect = "Hello Index!";
@@ -75,21 +69,27 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testInvokeTwoStep()
     {
-        $this->template->setData(['name' => 'Index']);
+        // also tests that "assigned" vars are shared
+        $this->template->setData([
+            'name' => 'Index',
+            'title' => 'Title'
+        ]);
         $this->template->setView('index');
         $this->template->setLayout('layout/default');
         $actual = ($this->template)();
-        $expect = "before -- Hello Index! -- after";
+        $expect = "Changed Title -- before -- Hello Index! -- after";
         $this->assertSame($expect, $actual);
     }
 
     public function testPartial()
     {
+        // also tests that "local" vars are not shared
         $this->template->setView('master');
         $actual = ($this->template)();
         $expect = "foo = bar" . PHP_EOL
                 . "foo = baz" . PHP_EOL
-                . "foo = dib" . PHP_EOL;
+                . "foo = dib" . PHP_EOL
+                . 'dib' . PHP_EOL;
         $this->assertSame($expect, $actual);
     }
 
@@ -106,7 +106,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function testException()
     {
         $this->template->setView('exception');
-        $this->expectException(ParseError::CLASS);
+        $this->expectException(ParseError::class);
         $actual = ($this->template)();
     }
 

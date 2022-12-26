@@ -1,13 +1,41 @@
 <?php
+declare(strict_types=1);
+
 namespace Qiq;
 
+use Psr\Container\ContainerInterface;
+use Qiq\Compiler\Compiler;
+use Qiq\Compiler\QiqCompiler;
 use stdClass;
 
 abstract class TemplateCore
 {
+    static public function new(
+        string|array $paths = [],
+        string $extension = '.php',
+        HelperLocator $helperLocator = null,
+        Compiler $compiler = null,
+    ) : static
+    {
+        $helperLocator ??= new HelperLocator();
+        $compiler ??= new QiqCompiler();
+        $templateLocator = new TemplateLocator(
+            (array) $paths,
+            $extension,
+            $compiler,
+        );
+
+        return new static(
+            $templateLocator,
+            $helperLocator
+        );
+    }
+
+    private Indent $indent;
+
     private string $content = '';
 
-    private stdClass $data;
+    private array $data = [];
 
     private ?string $layout = null;
 
@@ -19,9 +47,10 @@ abstract class TemplateCore
 
     public function __construct(
         private TemplateLocator $templateLocator,
-        private HelperLocator $helperLocator
+        private ContainerInterface $helperLocator
     ) {
-        $this->data = new stdClass();
+        /** @phpstan-ignore-next-line PHPStan fails to recognize the type. */
+        $this->indent = $this->helperLocator->get(Indent::class);
     }
 
     public function __invoke() : string
@@ -39,49 +68,58 @@ abstract class TemplateCore
 
     public function __get(string $key) : mixed
     {
-        return $this->data->$key;
+        return $this->data[$key];
     }
 
     public function __set(string $key, mixed $val) : void
     {
-        $this->data->$key = $val;
+        $this->data[$key] = $val;
     }
 
     public function __isset(string $key) : bool
     {
-        return isset($this->data->$key);
+        return isset($this->data[$key]);
     }
 
     public function __unset(string $key) : void
     {
-        unset($this->data->$key);
+        unset($this->data[$key]);
     }
 
-    public function __call(string $name, array $args) : mixed
+    public function setIndent(string $base) : void
     {
-        return $this->helperLocator->$name(...$args);
+        $this->indent->set($base);
     }
 
     public function setData(array|stdClass $data) : void
     {
-        $this->data = (object) $data;
+        $this->data = (array) $data;
     }
 
-    public function addData(iterable $data) : void
+    public function addData(array|stdClass $data) : void
     {
-        foreach ($data as $key => $val) {
-            $this->data->$key = $val;
-        }
+        $this->data = array_replace($this->data, (array) $data);
     }
 
-    public function getData() : stdClass
+    public function getData() : array
     {
         return $this->data;
     }
 
-    public function getHelperLocator() : HelperLocator
+    protected function &refData() : array
     {
-        return $this->helperLocator;
+        return $this->data;
+    }
+
+    /**
+     * @template T of object
+     * @param class-string<T> $class
+     * @return T of object
+     */
+    public function getHelper(string $class) : object
+    {
+        /** @var T of object */
+        return $this->helperLocator->get($class);
     }
 
     public function setLayout(?string $layout) : void
@@ -104,6 +142,11 @@ abstract class TemplateCore
         return $this->view;
     }
 
+    public function getHelperLocator() : ContainerInterface
+    {
+        return $this->helperLocator;
+    }
+
     public function getTemplateLocator() : TemplateLocator
     {
         return $this->templateLocator;
@@ -116,7 +159,7 @@ abstract class TemplateCore
 
     protected function getTemplate(string $name) : string
     {
-        return $this->templateLocator->get($name);
+        return $this->templateLocator->get($this, $name);
     }
 
     protected function getContent() : string
@@ -174,5 +217,8 @@ abstract class TemplateCore
         }
     }
 
-    abstract protected function render(string $__NAME__, array $__VARS__ = []) : string;
+    abstract protected function render(
+        string $__NAME__,
+        array $__LOCAL__ = []
+    ) : string;
 }

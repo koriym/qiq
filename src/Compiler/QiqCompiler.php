@@ -1,9 +1,13 @@
 <?php
+declare(strict_types=1);
+
 namespace Qiq\Compiler;
 
 use FilesystemIterator;
+use Qiq\TemplateCore;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 
 class QiqCompiler implements Compiler
 {
@@ -13,7 +17,7 @@ class QiqCompiler implements Compiler
             . DIRECTORY_SEPARATOR . 'qiq';
     }
 
-    public function __invoke(string $source) : string
+    public function __invoke(TemplateCore $template, string $source) : string
     {
         $append = (PHP_OS_FAMILY === 'Windows')
             ? substr($source, 2)
@@ -23,7 +27,7 @@ class QiqCompiler implements Compiler
 
         if (! $this->isCompiled($source, $cached)) {
             $text = (string) file_get_contents($source);
-            $code = $this->compile($text);
+            $code = $this->compile($template, $text);
             file_put_contents($cached, $code);
         }
 
@@ -46,6 +50,7 @@ class QiqCompiler implements Compiler
             RecursiveIteratorIterator::CHILD_FIRST
         );
 
+        /** @var SplFileInfo $file */
         foreach ($files as $file) {
             if ($file->isDir()) {
                 rmdir($file->getPathname());
@@ -75,7 +80,7 @@ class QiqCompiler implements Compiler
         return true;
     }
 
-    protected function compile(string $text) : string
+    protected function compile(TemplateCore $template, string $text) : string
     {
         $parts = preg_split(
             '/(\s*{{.*?}}\s*)/ms',
@@ -88,7 +93,9 @@ class QiqCompiler implements Compiler
 
         foreach ((array) $parts as $part) {
             $token = $this->newToken((string) $part);
-            $compiled .= ($token === null) ? $this->embrace((string) $part) : $token;
+            $compiled .= $token === null
+                ? $this->embrace((string) $part)
+                : $token->compile($template);
         }
 
         return $compiled;

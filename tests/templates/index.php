@@ -1,1 +1,1 @@
-<?= $this->hello($this->name); ?>
+Hello <?= $name ?>!<?php $title = 'Changed Title';

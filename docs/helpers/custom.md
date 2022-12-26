@@ -14,9 +14,9 @@ Here is a helper to ROT-13 a string:
 ```php
 namespace My\Helper;
 
-use Qiq\Helper;
+use Qiq\HtmlHelper;
 
-class Rot13 extends Helper
+class Rot13 extends HtmlHelper
 {
     public function __invoke(string $str) : string
     {

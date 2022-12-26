@@ -1,36 +1,20 @@
 <?php
+declare(strict_types=1);
+
 namespace Qiq;
 
-use Qiq\Compiler\Compiler;
-use Qiq\Compiler\QiqCompiler;
 use Throwable;
 
 class Template extends TemplateCore
 {
-    static public function new(
-        string|array $paths = [],
-        string $extension = '.php',
-        string $encoding = 'utf-8',
-        string $cachePath = null,
-        HelperLocator $helperLocator = null,
-        Compiler $compiler = null,
-    ) : static
-    {
-        $helperLocator ??= HelperLocator::new(new Escape($encoding));
-        $compiler ??= new QiqCompiler($cachePath);
-
-        return new static(
-            new TemplateLocator((array) $paths, $extension, $compiler),
-            $helperLocator
-        );
-    }
-
-    public function render(string $__NAME__, array $__VARS__ = []) : string
+    public function render(string $__NAME__, array $__LOCAL__ = []) : string
     {
         try {
             $__OBLEVEL__ = ob_get_level();
             ob_start();
-            extract($__VARS__, EXTR_SKIP);
+            $__SHARED__ =& $this->refData();
+            extract($__LOCAL__, EXTR_SKIP);
+            extract($__SHARED__, EXTR_SKIP|EXTR_REFS);
             require $this->getTemplate($__NAME__);
             return (string) ob_get_clean();
         } catch (Throwable $e) {

@@ -22,8 +22,9 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "laminas/laminas-escaper": "^2.0"
+        "php": "^8.1",
+        "laminas/laminas-escaper": "^2.0",
+        "psr/container": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -32,7 +33,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
-        "phpstan/phpstan": "^0.12"
+        "phpstan/phpstan": "^1.0"
     },
     "autoload-dev": {
         "psr-4": {
@@ -41,7 +42,7 @@
     },
     "scripts": {
         "test": "./vendor/bin/phpunit",
-        "stan": "./vendor/bin/phpstan analyze -c phpstan.neon src",
-        "testan": "composer test && composer stan"
+        "cs-fix": "./vendor/bin/phpstan analyze -c phpstan.neon",
+        "check": "composer test && composer cs-fix"
     }
 }

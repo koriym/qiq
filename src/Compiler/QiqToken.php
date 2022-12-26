@@ -1,8 +1,18 @@
 <?php
+declare(strict_types=1);
+
 namespace Qiq\Compiler;
+
+use Qiq\TemplateCore;
 
 class QiqToken
 {
+    protected const INDENT = [
+        "\n" => '\n',
+        "\r" => '\r',
+        "\t" => '\t',
+    ];
+
     protected const KNOWN = [
         '__DIR__',
         '__FILE__',
@@ -69,7 +79,7 @@ class QiqToken
         $this->fixEcho();
     }
 
-    public function __toString()
+    public function compile(TemplateCore $template) : string
     {
         $code = $this->firstWord . $this->remainder;
         $char = substr($this->firstWord, 0, 1);
@@ -79,11 +89,13 @@ class QiqToken
             (ctype_alpha($char) || $char === '_')
             && ! defined($this->firstWord)
             && ! in_array($this->firstWord, static::KNOWN)
+            && method_exists($template, $this->firstWord)
         ) {
-            // alphabetic or underscore, but not defined and not known.
+            // alphabetic or underscore, but not defined and not known,
+            // and the helper locator has it.
+            //
             // treat as a helper. set indent so helper can use it if needed.
-            $space = strrchr($this->leadingSpaceOuter, PHP_EOL) or '';
-            $indent = "<?php \\Qiq\\Indent::set('$space') ?>";
+            $indent = $this->indent($this->leadingSpaceOuter);
             $code = "\$this->{$code}";
         }
 
@@ -93,6 +105,18 @@ class QiqToken
             . $code
             . $this->closing
             . $this->tailingSpaceOuter;
+    }
+
+    protected function indent(string $space) : string
+    {
+        $space = strrchr($space, PHP_EOL);
+
+        if ($space === false) {
+            return '';
+        }
+
+        $space = strtr($space, self::INDENT);
+        return "<?php \$this->setIndent(\"{$space}\") ?>";
     }
 
     protected function fixEcho() : void

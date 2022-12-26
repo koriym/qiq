@@ -1,27 +1,36 @@
 <?php
+declare(strict_types=1);
+
 namespace Qiq;
 
+/**
+ * statics will be a problem with mutiple templates.
+ * this may need to be a helper.
+ *
+ * hm, except compiler needs it, and maybe different formats need it.
+ * make it a Template method directly?
+ */
 class Indent
 {
-    protected static string $indent = '    ';
+    protected string $indent = '    ';
 
-    protected static string $base = '';
+    protected string $base = '';
 
-    protected static int $level = 0;
+    protected int $level = 0;
 
-    public static function set(string $base) : void
+    public function set(string $base) : void
     {
-        static::$base = $base;
+        $this->base = $base;
     }
 
-    public static function level(int $level) : void
+    public function level(int $level) : void
     {
-        static::$level += $level;
+        $this->level += $level;
     }
 
-    public static function get(int $add = 0) : string
+    public function get(int $add = 0) : string
     {
-        return static::$base
-            . str_repeat(static::$indent, static::$level + $add);
+        return $this->base
+            . str_repeat($this->indent, $this->level + $add);
     }
 }

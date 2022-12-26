@@ -5,6 +5,7 @@ class TemplateLocatorTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp() : void
     {
+        $this->template = Template::new();
         $this->templateLocator = $this->newTemplateLocator();
         $this->templateLocator->clear();
     }
@@ -19,21 +20,21 @@ class TemplateLocatorTest extends \PHPUnit\Framework\TestCase
         $this->templateLocator->setPaths([__DIR__ . '/templates']);
 
         $this->assertTrue($this->templateLocator->has('index'));
-        $actual = $this->templateLocator->get('index');
+        $actual = $this->templateLocator->get($this->template, 'index');
 
         $expect = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/templates/index.php');
         $this->assertSame($expect, $actual);
 
         $this->assertFalse($this->templateLocator->has('no-such-template'));
-        $this->expectException(Exception\TemplateNotFound::CLASS);
-        $this->templateLocator->get('no-such-template');
+        $this->expectException(Exception\TemplateNotFound::class);
+        $this->templateLocator->get($this->template,'no-such-template');
     }
 
     public function testDoubleDots()
     {
-        $this->expectException(Exception\TemplateNotFound::CLASS);
+        $this->expectException(Exception\TemplateNotFound::class);
         $this->expectExceptionMessage("Double-dots not allowed in template specifications");
-        $this->templateLocator->get('foo/../bar');
+        $this->templateLocator->get($this->template, 'foo/../bar');
     }
 
     public function testSetAndGetPaths()
@@ -93,28 +94,28 @@ class TemplateLocatorTest extends \PHPUnit\Framework\TestCase
             $dir . 'foo',
         ]);
 
-        $this->assertOutput('foo', $templateLocator->get('test'));
+        $this->assertOutput('foo', $templateLocator->get($this->template, 'test'));
 
         $templateLocator = $this->newTemplateLocator([
             $dir . 'bar',
             $dir . 'foo',
         ]);
-        $this->assertOutput('bar', $templateLocator->get('test'));
+        $this->assertOutput('bar', $templateLocator->get($this->template, 'test'));
 
         $templateLocator = $this->newTemplateLocator([
             $dir . 'baz',
             $dir . 'bar',
             $dir . 'foo',
         ]);
-        $this->assertOutput('baz', $templateLocator->get('test'));
+        $this->assertOutput('baz', $templateLocator->get($this->template, 'test'));
 
         // get it again for code coverage
-        $this->assertOutput('baz', $templateLocator->get('test'));
+        $this->assertOutput('baz', $templateLocator->get($this->template, 'test'));
 
         // look for a file that doesn't exist
         $templateLocator->setExtension('.phtml');
-        $this->expectException(Exception\TemplateNotFound::CLASS);
-        $templateLocator->get('test');
+        $this->expectException(Exception\TemplateNotFound::class);
+        $templateLocator->get($this->template, 'test');
     }
 
     public function testCollections()
@@ -127,9 +128,9 @@ class TemplateLocatorTest extends \PHPUnit\Framework\TestCase
             "baz:{$dir}/baz",
         ]);
 
-        $this->assertOutput('foo', $this->templateLocator->get('foo:test'));
-        $this->assertOutput('bar', $this->templateLocator->get('bar:test'));
-        $this->assertOutput('baz', $this->templateLocator->get('baz:test'));
+        $this->assertOutput('foo', $this->templateLocator->get($this->template, 'foo:test'));
+        $this->assertOutput('bar', $this->templateLocator->get($this->template, 'bar:test'));
+        $this->assertOutput('baz', $this->templateLocator->get($this->template, 'baz:test'));
     }
 
     protected function assertOutput(string $expect, string $file) : void
