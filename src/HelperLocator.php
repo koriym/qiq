@@ -1,114 +1,125 @@
 <?php
+declare(strict_types=1);
+
 namespace Qiq;
 
-class HelperLocator
+use Psr\Container\ContainerInterface;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionNamedType;
+use ReflectionParameter;
+use RuntimeException;
+use Qiq\Exception;
+
+/**
+ * This is a low-powered container to handle only basic constructor DI.
+ * You can configure arguments by passing `$config['className']['parameterName']`.
+ *
+ * Parameter resolution:
+ *
+ * - First, use a parameter value from $config, if one is available.
+ * - Next, use the default parameter value, if one is defined.
+ * - Last, get an object of the parameter type from the the HelperLocator.
+ *
+ * If none of these work, you'll get a RuntimeException.
+ *
+ * @todo use an ParameterNotResolvable execption instead of RuntimeException.
+ */
+class HelperLocator implements ContainerInterface
 {
-    static public function new(Escape $escape = null, array $factories = []) : static
-    {
-        $escape ??= new Escape('utf-8');
-
-        $default = [
-            'a'                     => function () use ($escape) { return new Helper\EscapeAttr($escape); },
-            'anchor'                => function () use ($escape) { return new Helper\Anchor($escape); },
-            'base'                  => function () use ($escape) { return new Helper\Base($escape); },
-            'button'                => function () use ($escape) { return new Helper\Button($escape); },
-            'c'                     => function () use ($escape) { return new Helper\EscapeCss($escape); },
-            'checkboxField'         => function () use ($escape) { return new Helper\CheckboxField($escape); },
-            'colorField'            => function () use ($escape) { return new Helper\ColorField($escape); },
-            'dateField'             => function () use ($escape) { return new Helper\DateField($escape); },
-            'datetimeField'         => function () use ($escape) { return new Helper\DatetimeField($escape); },
-            'datetimeLocalField'    => function () use ($escape) { return new Helper\DatetimeLocalField($escape); },
-            'dl'                    => function () use ($escape) { return new Helper\Dl($escape); },
-            'emailField'            => function () use ($escape) { return new Helper\EmailField($escape); },
-            'escape'                => function () use ($escape) { return $escape; },
-            'fileField'             => function () use ($escape) { return new Helper\FileField($escape); },
-            'form'                  => function () use ($escape) { return new Helper\Form($escape); },
-            'h'                     => function () use ($escape) { return new Helper\EscapeHtml($escape); },
-            'hiddenField'           => function () use ($escape) { return new Helper\HiddenField($escape); },
-            'image'                 => function () use ($escape) { return new Helper\Image($escape); },
-            'imageButton'           => function () use ($escape) { return new Helper\ImageButton($escape); },
-            'inputField'            => function () use ($escape) { return new Helper\InputField($escape); },
-            'items'                 => function () use ($escape) { return new Helper\Items($escape); },
-            'j'                     => function () use ($escape) { return new Helper\EscapeJs($escape); },
-            'label'                 => function () use ($escape) { return new Helper\Label($escape); },
-            'link'                  => function () use ($escape) { return new Helper\Link($escape); },
-            'linkStylesheet'        => function () use ($escape) { return new Helper\LinkStylesheet($escape); },
-            'meta'                  => function () use ($escape) { return new Helper\Meta($escape); },
-            'metaHttp'              => function () use ($escape) { return new Helper\MetaHttp($escape); },
-            'metaName'              => function () use ($escape) { return new Helper\MetaName($escape); },
-            'monthField'            => function () use ($escape) { return new Helper\MonthField($escape); },
-            'numberField'           => function () use ($escape) { return new Helper\NumberField($escape); },
-            'ol'                    => function () use ($escape) { return new Helper\Ol($escape); },
-            'passwordField'         => function () use ($escape) { return new Helper\PasswordField($escape); },
-            'radioField'            => function () use ($escape) { return new Helper\RadioField($escape); },
-            'rangeField'            => function () use ($escape) { return new Helper\RangeField($escape); },
-            'resetButton'           => function () use ($escape) { return new Helper\ResetButton($escape); },
-            'script'                => function () use ($escape) { return new Helper\Script($escape); },
-            'searchField'           => function () use ($escape) { return new Helper\SearchField($escape); },
-            'select'                => function () use ($escape) { return new Helper\Select($escape); },
-            'submitButton'          => function () use ($escape) { return new Helper\SubmitButton($escape); },
-            'telField'              => function () use ($escape) { return new Helper\TelField($escape); },
-            'textarea'              => function () use ($escape) { return new Helper\Textarea($escape); },
-            'textField'             => function () use ($escape) { return new Helper\TextField($escape); },
-            'timeField'             => function () use ($escape) { return new Helper\TimeField($escape); },
-            'u'                     => function () use ($escape) { return new Helper\EscapeUrl($escape); },
-            'ul'                    => function () use ($escape) { return new Helper\Ul($escape); },
-            'urlField'              => function () use ($escape) { return new Helper\UrlField($escape); },
-            'weekField'             => function () use ($escape) { return new Helper\WeekField($escape); },
-        ];
-
-        $helper_factories = array_merge($default, $factories);
-
-        return new static($helper_factories);
-    }
-
-    protected array $factories = [];
-
+    /**
+     * @var object[]
+     */
     protected array $instances = [];
 
-    public function __construct(array $factories = [])
+    public function __construct(protected array $config = [])
     {
-        $this->factories = $factories;
     }
 
-    public function __call(string $name, array $args) : mixed
+    /**
+     * @template T of object
+     * @param class-string<T> $class
+     * @return T of object
+     */
+    public function get(string $class) : object
     {
-        return $this->get($name)(...$args);
+        if (! isset($this->instances[$class])) {
+            $this->instances[$class] = $this->new($class);
+        }
+
+        /** @var T of object */
+        return $this->instances[$class];
     }
 
-    public function set(string $name, mixed /* callable */ $callable) : void
+    public function has(string $class) : bool
     {
-        $this->factories[$name] = $callable;
-        unset($this->instances[$name]);
+        return class_exists($class);
     }
 
-    public function has(string $name) : bool
+    /**
+     * @template T of object
+     * @param class-string<T> $class
+     * @return T of object
+     */
+    protected function new(string $class) : object
     {
-        if (isset($this->factories[$name]) || isset($this->instances[$name])) {
-            return true;
+        if (! $this->has($class)) {
+            throw new Exception\HelperNotFound("Helper of class '{$class}'' does not exist.");
         }
 
-        $func = '\\' . $name;
+        $constructor = (new ReflectionClass($class))->getConstructor();
+        $arguments = $constructor
+            ? $this->arguments($class, $constructor)
+            : [];
 
-        if (function_exists($name)) {
-            $this->instances[$name] = $func;
-            return true;
-        }
-
-        return false;
+        /** @var T of object */
+        return new $class(...$arguments);
     }
 
-    public function get(string $name) : mixed
+    protected function arguments(
+        string $declaringClass,
+        ReflectionMethod $constructor
+    ) : array
     {
-        if (! $this->has($name)) {
-            throw new Exception\HelperNotFound($name);
+        $arguments = [];
+        $parameters = $constructor->getParameters();
+
+        foreach ($parameters as $parameter) {
+            $arguments[] = $this->argument($declaringClass, $parameter);
         }
 
-        if (! isset($this->instances[$name])) {
-            $factory = $this->factories[$name];
-            $this->instances[$name] = $factory();
+        return $arguments;
+    }
+
+    protected function argument(
+        string $declaringClass,
+        ReflectionParameter $parameter,
+    ) : mixed
+    {
+        $name = $parameter->getName();
+
+        if (isset($this->config[$declaringClass][$name])) {
+            return $this->config[$declaringClass][$name];
         }
 
-        return $this->instances[$name];
+        if ($parameter->isDefaultValueAvailable()) {
+            return $parameter->getDefaultValue();
+        }
+
+        $type = $parameter->getType();
+
+        if (! $type instanceof ReflectionNamedType) {
+            return null;
+        }
+
+        /** @var class-string */
+        $parameterClass = $type->getName();
+
+        if ($this->has($parameterClass)) {
+            return $this->get($parameterClass);
+        }
+
+        $message = "Cannot create argument for '{$declaringClass}::\${$name}' of type '{$type}'.";
+        throw new RuntimeException($message);
     }
 }
