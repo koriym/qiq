@@ -106,7 +106,7 @@ abstract class TemplateCore
         return $this->data;
     }
 
-    protected function &refData() : array
+    public function &refData() : array
     {
         return $this->data;
     }
@@ -157,45 +157,45 @@ abstract class TemplateCore
         return $this->templateLocator->has($name);
     }
 
-    protected function getTemplate(string $name) : string
+    public function getTemplate(string $name) : string
     {
         return $this->templateLocator->get($this, $name);
     }
 
-    protected function getContent() : string
+    public function getContent() : string
     {
         return $this->content;
     }
 
-    protected function hasSection(string $name) : bool
+    public function hasSection(string $name) : bool
     {
         return isset($this->sections[$name]);
     }
 
-    protected function getSection(string $name) : ?string
+    public function getSection(string $name) : ?string
     {
         return $this->sections[$name] ?? null;
     }
 
-    protected function setSection(string $name) : void
+    public function setSection(string $name) : void
     {
         $this->sectionStack[] = [__FUNCTION__, $name];
         ob_start();
     }
 
-    protected function appendSection(string $name) : void
+    public function appendSection(string $name) : void
     {
         $this->sectionStack[] = [__FUNCTION__, $name];
         ob_start();
     }
 
-    protected function prependSection(string $name) : void
+    public function prependSection(string $name) : void
     {
         $this->sectionStack[] = [__FUNCTION__, $name];
         ob_start();
     }
 
-    protected function endSection() : void
+    public function endSection() : void
     {
         list($func, $name) = array_pop($this->sectionStack);
         $buffer = (string) ob_get_clean();
@@ -217,7 +217,7 @@ abstract class TemplateCore
         }
     }
 
-    abstract protected function render(
+    abstract public function render(
         string $__NAME__,
         array $__LOCAL__ = []
     ) : string;

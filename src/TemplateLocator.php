@@ -3,7 +3,11 @@ declare(strict_types=1);
 
 namespace Qiq;
 
+use FilesystemIterator;
 use Qiq\Compiler\Compiler;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
 
 class TemplateLocator
 {
@@ -105,7 +109,34 @@ class TemplateLocator
         $this->compiler->clear();
     }
 
-    protected function compile(TemplateCore $template, string $name) : string
+    public function compileAll(TemplateCore $template) : array
+    {
+        $compiled = [];
+
+        foreach ($this->paths as $collection => $paths) {
+            foreach ($paths as $path) {
+                $files = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator(
+                        $path,
+                        FilesystemIterator::SKIP_DOTS
+                    ),
+                    RecursiveIteratorIterator::CHILD_FIRST
+                );
+
+                /** @var SplFileInfo $file */
+                foreach ($files as $file) {
+                    $source = $file->getPathname();
+                    if (str_ends_with($source, $this->extension)) {
+                        $compiled[] = ($this->compiler)($template, $source);
+                    }
+                }
+            }
+        }
+
+        return $compiled;
+    }
+
+    public function compile(TemplateCore $template, string $name) : string
     {
         if (! isset($this->compiled[$name])) {
             $this->compiled[$name] = ($this->compiler)(

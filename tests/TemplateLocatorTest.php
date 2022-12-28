@@ -1,6 +1,10 @@
 <?php
 namespace Qiq;
 
+use Qiq\Compiler\QiqCompiler;
+use Qiq\Compiler\FakeCompiler;
+use Qiq\Html\HtmlTemplate;
+
 class TemplateLocatorTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp() : void
@@ -12,7 +16,7 @@ class TemplateLocatorTest extends \PHPUnit\Framework\TestCase
 
     protected function newTemplateLocator(array $paths = [])
     {
-        return new TemplateLocator($paths, '.php', new Compiler\FakeCompiler());
+        return new TemplateLocator($paths, '.php', new FakeCompiler());
     }
 
     public function testHasGet()
@@ -131,6 +135,23 @@ class TemplateLocatorTest extends \PHPUnit\Framework\TestCase
         $this->assertOutput('foo', $this->templateLocator->get($this->template, 'foo:test'));
         $this->assertOutput('bar', $this->templateLocator->get($this->template, 'bar:test'));
         $this->assertOutput('baz', $this->templateLocator->get($this->template, 'baz:test'));
+    }
+
+    public function testCompileAll()
+    {
+        $cachePath = __DIR__ . DIRECTORY_SEPARATOR . 'cache';
+        $compiler = new QiqCompiler($cachePath);
+
+        $sourceDir = __DIR__ . DIRECTORY_SEPARATOR . 'templates-qiq';
+        $htmlTemplate = HtmlTemplate::new(
+            paths: [$sourceDir],
+            extension: '.php',
+            compiler: $compiler
+        );
+
+        $compiler->clear();
+        $actual = $htmlTemplate->getTemplateLocator()->compileAll($htmlTemplate);
+        var_dump($actual);
     }
 
     protected function assertOutput(string $expect, string $file) : void
