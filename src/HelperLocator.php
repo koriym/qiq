@@ -108,7 +108,7 @@ class HelperLocator implements ContainerInterface
         $type = $parameter->getType();
 
         if (! $type instanceof ReflectionNamedType) {
-            return $this->defaultArgument($declaringClass, $parameter, $name, $type);
+            return $this->default($declaringClass, $parameter, $name, $type);
         }
 
         /** @var class-string */
@@ -118,10 +118,10 @@ class HelperLocator implements ContainerInterface
             return $this->get($parameterClass);
         }
 
-        return $this->defaultArgument($declaringClass, $parameter, $name, $type);
+        return $this->default($declaringClass, $parameter, $name, $type);
     }
 
-    protected function defaultArgument(
+    protected function default(
         string $declaringClass,
         ReflectionParameter $parameter,
         string $name,
