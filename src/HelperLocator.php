@@ -6,6 +6,7 @@ namespace Qiq;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionType;
 use ReflectionNamedType;
 use ReflectionParameter;
 use RuntimeException;
@@ -18,8 +19,8 @@ use Qiq\Exception;
  * Parameter resolution:
  *
  * - First, use a parameter value from $config, if one is available.
- * - Next, use the default parameter value, if one is defined.
- * - Last, get an object of the parameter type from the the HelperLocator.
+ * - Next, try to get an object of the parameter type from the the HelperLocator.
+ * - Last, use the default parameter value, if one is defined.
  *
  * If none of these work, you'll get a RuntimeException.
  *
@@ -64,7 +65,9 @@ class HelperLocator implements ContainerInterface
     protected function new(string $class) : object
     {
         if (! $this->has($class)) {
-            throw new Exception\HelperNotFound("Helper of class '{$class}'' does not exist.");
+            throw new Exception\HelperNotFound(
+                "Helper of class '{$class}' does not exist."
+            );
         }
 
         $constructor = (new ReflectionClass($class))->getConstructor();
@@ -102,14 +105,10 @@ class HelperLocator implements ContainerInterface
             return $this->config[$declaringClass][$name];
         }
 
-        if ($parameter->isDefaultValueAvailable()) {
-            return $parameter->getDefaultValue();
-        }
-
         $type = $parameter->getType();
 
         if (! $type instanceof ReflectionNamedType) {
-            return null;
+            return $this->defaultArgument($declaringClass, $parameter, $name, $type);
         }
 
         /** @var class-string */
@@ -117,6 +116,20 @@ class HelperLocator implements ContainerInterface
 
         if ($this->has($parameterClass)) {
             return $this->get($parameterClass);
+        }
+
+        return $this->defaultArgument($declaringClass, $parameter, $name, $type);
+    }
+
+    protected function defaultArgument(
+        string $declaringClass,
+        ReflectionParameter $parameter,
+        string $name,
+        ?ReflectionType $type,
+    ) : mixed
+    {
+        if ($parameter->isDefaultValueAvailable()) {
+            return $parameter->getDefaultValue();
         }
 
         $message = "Cannot create argument for '{$declaringClass}::\${$name}' of type '{$type}'.";
