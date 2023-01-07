@@ -1,7 +1,7 @@
 <?php
 namespace Qiq\Compiler;
 
-use Qiq\Html\HtmlTemplate;
+use Qiq\HtmlTemplate;
 
 class QiqTokenTest extends \PHPUnit\Framework\TestCase
 {

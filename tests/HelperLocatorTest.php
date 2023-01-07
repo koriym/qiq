@@ -1,7 +1,7 @@
 <?php
 namespace Qiq;
 
-use Qiq\Html\Helper\FakeHelper;
+use Qiq\Helper\Html\FakeHelper;
 
 class HelperLocatorTest extends \PHPUnit\Framework\TestCase
 {

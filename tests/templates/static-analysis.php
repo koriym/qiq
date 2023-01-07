@@ -1,6 +1,6 @@
 <?php
 /**
- * @var Qiq\Html\HtmlTemplate $this
+ * @var Qiq\HtmlTemplate $this
  * @var string $foo
  */
 echo $this->render('index');

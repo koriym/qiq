@@ -67,7 +67,7 @@ available in template files:
 ```php
 namespace Project\Template;
 
-class Template extends \Qiq\Html\HtmlTemplate
+class Template extends \Qiq\HtmlTemplate
 {
     use TemplateHelpers;
 }
@@ -163,7 +163,7 @@ namespace Project\Template;
 
 namespace Project\Template;
 
-class Template extends \Qiq\Html\HtmlTemplate
+class Template extends \Qiq\HtmlTemplate
 {
     use TemplateHelpers;
 

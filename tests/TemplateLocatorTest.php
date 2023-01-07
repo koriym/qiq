@@ -3,7 +3,7 @@ namespace Qiq;
 
 use Qiq\Compiler\QiqCompiler;
 use Qiq\Compiler\FakeCompiler;
-use Qiq\Html\HtmlTemplate;
+use Qiq\HtmlTemplate;
 
 class TemplateLocatorTest extends \PHPUnit\Framework\TestCase
 {

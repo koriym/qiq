@@ -1,6 +1,6 @@
 {{
 /**
- * @var \Qiq\Html\HtmlTemplate $this
+ * @var \Qiq\HtmlTemplate $this
  */
 }}
 {{ syntax-error }}

@@ -101,6 +101,7 @@ class HelperLocator implements ContainerInterface
     {
         $name = $parameter->getName();
 
+        // is there a config element for this class and parameter?
         if (isset($this->config[$declaringClass][$name])) {
             return $this->config[$declaringClass][$name];
         }
@@ -108,16 +109,21 @@ class HelperLocator implements ContainerInterface
         $type = $parameter->getType();
 
         if (! $type instanceof ReflectionNamedType) {
+            // not a named type, try for the default value
             return $this->default($declaringClass, $parameter, $name, $type);
         }
 
         /** @var class-string */
         $parameterClass = $type->getName();
 
+        // is the parameter type an existing class?
         if ($this->has($parameterClass)) {
+            // use an object of the parameter type
             return $this->get($parameterClass);
         }
 
+        // no configured value, not an existing class,
+        // try for the default value
         return $this->default($declaringClass, $parameter, $name, $type);
     }
 
@@ -132,7 +138,8 @@ class HelperLocator implements ContainerInterface
             return $parameter->getDefaultValue();
         }
 
-        $message = "Cannot create argument for '{$declaringClass}::\${$name}' of type '{$type}'.";
-        throw new RuntimeException($message);
+        throw new RuntimeException(
+            "Cannot create argument for '{$declaringClass}::\${$name}' of type '{$type}'."
+        );
     }
 }
