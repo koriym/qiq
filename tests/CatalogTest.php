@@ -151,7 +151,11 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
 
         $compiler->clear();
         $actual = $htmlTemplate->getCatalog()->compileAll($htmlTemplate);
-        var_dump($actual);
+        foreach ($actual as $file) {
+            $this->assertTrue(str_starts_with($file, $cachePath));
+        }
+
+        $this->assertCount(10, $actual);
     }
 
     protected function assertOutput(string $expect, string $file) : void
