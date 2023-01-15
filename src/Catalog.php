@@ -9,7 +9,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 
-class TemplateLocator
+class Catalog
 {
     protected array $paths = [];
 
@@ -54,7 +54,7 @@ class TemplateLocator
 
         list ($collection, $name) = $this->split($name);
 
-        throw new Exception\TemplateNotFound(PHP_EOL
+        throw new Exception\FileNotFound(PHP_EOL
             . "Template: $name" . PHP_EOL
             . "Extension: {$this->extension}" . PHP_EOL
             . "Collection: " . ($collection === '' ? '(default)' : $collection) . PHP_EOL
@@ -157,7 +157,9 @@ class TemplateLocator
     protected function split(string $spec) : array
     {
         if (strpos($spec, '..') !== false) {
-            throw new Exception\TemplateNotFound("Double-dots not allowed in template specifications: $spec");
+            throw new Exception\FileNotFound(
+                "Double-dots not allowed in file specifications: {$spec}"
+            );
         }
 
         $offset = (PHP_OS_FAMILY === 'Windows') ? 2 : 0;

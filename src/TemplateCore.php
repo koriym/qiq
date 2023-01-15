@@ -13,21 +13,21 @@ abstract class TemplateCore
     static public function new(
         string|array $paths = [],
         string $extension = '.php',
-        HelperLocator $helperLocator = null,
+        ContainerInterface $container = null,
         Compiler $compiler = null,
     ) : static
     {
-        $helperLocator ??= new HelperLocator();
+        $container ??= new Container();
         $compiler ??= new QiqCompiler();
-        $templateLocator = new TemplateLocator(
+        $catalog = new Catalog(
             (array) $paths,
             $extension,
             $compiler,
         );
 
         return new static(
-            $templateLocator,
-            $helperLocator
+            $catalog,
+            $container
         );
     }
 
@@ -46,11 +46,11 @@ abstract class TemplateCore
     private ?string $view = null;
 
     public function __construct(
-        private TemplateLocator $templateLocator,
-        private ContainerInterface $helperLocator
+        private Catalog $catalog,
+        private ContainerInterface $container
     ) {
         /** @phpstan-ignore-next-line PHPStan fails to recognize the type. */
-        $this->indent = $this->helperLocator->get(Indent::class);
+        $this->indent = $this->container->get(Indent::class);
     }
 
     public function __invoke() : string
@@ -111,17 +111,6 @@ abstract class TemplateCore
         return $this->data;
     }
 
-    /**
-     * @template T of object
-     * @param class-string<T> $class
-     * @return T of object
-     */
-    public function getHelper(string $class) : object
-    {
-        /** @var T of object */
-        return $this->helperLocator->get($class);
-    }
-
     public function setLayout(?string $layout) : void
     {
         $this->layout = $layout;
@@ -142,24 +131,35 @@ abstract class TemplateCore
         return $this->view;
     }
 
-    public function getHelperLocator() : ContainerInterface
+    public function getContainer() : ContainerInterface
     {
-        return $this->helperLocator;
+        return $this->container;
     }
 
-    public function getTemplateLocator() : TemplateLocator
+    /**
+     * @template T of object
+     * @param class-string<T> $class
+     * @return T of object
+     */
+    public function getObject(string $class) : object
     {
-        return $this->templateLocator;
+        /** @var T of object */
+        return $this->container->get($class);
     }
 
-    public function hasTemplate(string $name) : bool
+    public function getCatalog() : Catalog
     {
-        return $this->templateLocator->has($name);
+        return $this->catalog;
     }
 
-    public function getTemplate(string $name) : string
+    public function hasFile(string $name) : bool
     {
-        return $this->templateLocator->get($this, $name);
+        return $this->catalog->has($name);
+    }
+
+    public function getFile(string $name) : string
+    {
+        return $this->catalog->get($this, $name);
     }
 
     public function getContent() : string

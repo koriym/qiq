@@ -18,15 +18,15 @@ use Qiq\Exception;
  *
  * Parameter resolution:
  *
- * - First, use a parameter value from $config, if one is available.
- * - Next, try to get an object of the parameter type from the the HelperLocator.
+ * - First, use an argument from $config, if one is available.
+ * - Next, try to get an object of the parameter type from the the Container.
  * - Last, use the default parameter value, if one is defined.
  *
  * If none of these work, you'll get a RuntimeException.
  *
  * @todo use an ParameterNotResolvable execption instead of RuntimeException.
  */
-class HelperLocator implements ContainerInterface
+class Container implements ContainerInterface
 {
     /**
      * @var object[]
@@ -42,7 +42,7 @@ class HelperLocator implements ContainerInterface
      * @param class-string<T> $class
      * @return T of object
      */
-    public function get(string $class) : object
+    public function get(string $class) : mixed
     {
         if (! isset($this->instances[$class])) {
             $this->instances[$class] = $this->new($class);
@@ -65,7 +65,7 @@ class HelperLocator implements ContainerInterface
     protected function new(string $class) : object
     {
         if (! $this->has($class)) {
-            throw new Exception\HelperNotFound(
+            throw new Exception\ObjectNotFound(
                 "Helper of class '{$class}' does not exist."
             );
         }
@@ -81,7 +81,7 @@ class HelperLocator implements ContainerInterface
 
     protected function arguments(
         string $declaringClass,
-        ReflectionMethod $constructor
+        ReflectionMethod $constructor,
     ) : array
     {
         $arguments = [];
@@ -118,11 +118,11 @@ class HelperLocator implements ContainerInterface
 
         // is the parameter type an existing class?
         if ($this->has($parameterClass)) {
-            // use an object of the parameter type
+            // use an object of that type
             return $this->get($parameterClass);
         }
 
-        // no configured value, not an existing class,
+        // no configured value, not an existing class;
         // try for the default value
         return $this->default($declaringClass, $parameter, $name, $type);
     }

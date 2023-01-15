@@ -10,8 +10,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     protected function setUp() : void
     {
         $this->template = Template::new();
-        $templateLocator = $this->template->getTemplateLocator();
-        $templateLocator->setPaths([__DIR__ . '/templates']);
+        $catalog = $this->template->getCatalog();
+        $catalog->setPaths([__DIR__ . '/templates']);
     }
 
     public function testMagicMethods()
@@ -28,18 +28,18 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetters()
     {
-        $this->assertInstanceOf(TemplateLocator::class, $this->template->getTemplateLocator());
-        $this->assertInstanceOf(HelperLocator::class, $this->template->getHelperLocator());
-        $this->assertInstanceOf(Indent::class, $this->template->getHelper(Indent::class));
+        $this->assertInstanceOf(Catalog::class, $this->template->getCatalog());
+        $this->assertInstanceOf(Container::class, $this->template->getContainer());
     }
 
     public function testSetIndent()
     {
         $expect = 'foo';
         $this->template->setIndent($expect);
-        $actual = $this->template->getHelper(Indent::class)->get();
+        $actual = $this->template->getContainer()->get(Indent::class)->get();
         $this->assertSame($expect, $actual);
     }
+
     public function testSetAddAndGetData()
     {
         $data = ['foo' => 'bar'];
@@ -112,7 +112,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testHasTemplate()
     {
-        $this->assertTrue($this->template->hasTemplate('master'));
-        $this->assertFalse($this->template->hasTemplate('nonesuch'));
+        $this->assertTrue($this->template->hasFile('master'));
+        $this->assertFalse($this->template->hasFile('nonesuch'));
     }
 }
