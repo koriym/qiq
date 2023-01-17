@@ -20,6 +20,7 @@ class Catalog
         protected string $extension,
     ) {
         $this->setPaths($paths);
+        $this->setExtension($extension);
     }
 
     protected function find(string $key) : ?string
