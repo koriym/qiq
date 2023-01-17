@@ -11,14 +11,22 @@ use SplFileInfo;
 
 class QiqCompiler implements Compiler
 {
-    public function __construct(protected ?string $cachePath = null)
+    protected array $cached = [];
+
+    protected string $cachePath;
+
+    public function __construct(string $cachePath = null)
     {
-        $this->cachePath ??= rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR)
-            . DIRECTORY_SEPARATOR . 'qiq';
+        $this->cachePath = $cachePath
+            ?? rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'qiq';
     }
 
     public function __invoke(string $source) : string
     {
+        if (isset($this->cached[$source])) {
+            return $this->cached[$source];
+        }
+
         $append = (PHP_OS_FAMILY === 'Windows')
             ? substr($source, 2)
             : $source;
@@ -26,9 +34,7 @@ class QiqCompiler implements Compiler
         $cached = $this->cachePath . $append;
 
         if (! $this->isCompiled($source, $cached)) {
-            $text = (string) file_get_contents($source);
-            $code = $this->compile($text);
-            file_put_contents($cached, $code);
+            $this->compile($source, $cached);
         }
 
         return $cached;
@@ -36,15 +42,13 @@ class QiqCompiler implements Compiler
 
     public function clear() : void
     {
-        $cachePath = (string) $this->cachePath;
-
-        if (! is_dir($cachePath)) {
+        if (! is_dir($this->cachePath)) {
             return;
         }
 
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
-                $cachePath,
+                $this->cachePath,
                 FilesystemIterator::SKIP_DOTS
             ),
             RecursiveIteratorIterator::CHILD_FIRST
@@ -58,6 +62,8 @@ class QiqCompiler implements Compiler
                 unlink($file->getPathname());
             }
         }
+
+        $this->cached = [];
     }
 
     protected function isCompiled(string $source, string $cached) : bool
@@ -80,8 +86,10 @@ class QiqCompiler implements Compiler
         return true;
     }
 
-    protected function compile(string $text) : string
+    protected function compile(string $source, string $cached) : void
     {
+        $text = (string) file_get_contents($source);
+
         $parts = preg_split(
             '/(\s*{{.*?}}\s*)/ms',
             $text,
@@ -89,16 +97,17 @@ class QiqCompiler implements Compiler
             PREG_SPLIT_DELIM_CAPTURE
         );
 
-        $compiled = '';
+        $code = '';
 
         foreach ((array) $parts as $part) {
             $token = $this->newToken((string) $part);
-            $compiled .= $token === null
+            $code .= $token === null
                 ? $this->embrace((string) $part)
                 : $token->compile();
         }
 
-        return $compiled;
+        file_put_contents($cached, $code);
+        $this->cached[$source] = $cached;
     }
 
     protected function embrace(string $part) : string

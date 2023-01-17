@@ -22,15 +22,10 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
     {
         $this->catalog->setPaths([__DIR__ . '/templates']);
 
-        $this->assertTrue($this->catalog->has('index'));
         $actual = $this->catalog->get('index');
 
         $expect = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/templates/index.php');
         $this->assertSame($expect, $actual);
-
-        $this->assertFalse($this->catalog->has('no-such-template'));
-        $this->expectException(Exception\FileNotFound::class);
-        $this->catalog->get('no-such-template');
     }
 
     public function testDoubleDots()

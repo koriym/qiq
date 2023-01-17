@@ -15,8 +15,6 @@ class Catalog
 
     protected array $found = [];
 
-    protected array $compiled = [];
-
     public function __construct(
         array $paths,
         protected string $extension,
@@ -25,31 +23,32 @@ class Catalog
         $this->setPaths($paths);
     }
 
-    public function has(string $name) : bool
+    protected function find(string $key) : ?string
     {
-        if (isset($this->found[$name])) {
-            return true;
+        if (isset($this->found[$key])) {
+            return $this->found[$key];
         }
 
-        $key = $name;
-        list($collection, $name) = $this->split($name);
+        list($collection, $name) = $this->split($key);
         $name = str_replace('/', DIRECTORY_SEPARATOR, $name);
 
         foreach ($this->paths[$collection] as $path) {
             $file = $path . DIRECTORY_SEPARATOR . $name . $this->extension;
             if (is_readable($file)) {
                 $this->found[$key] = $file;
-                return true;
+                return $file;
             }
         }
 
-        return false;
+        return null;
     }
 
     public function get(string $name) : string
     {
-        if ($this->has($name)) {
-            return $this->compile($name);
+        $source = $this->find($name);
+
+        if ($source !== null) {
+            return ($this->compiler)($source);
         }
 
         list ($collection, $name) = $this->split($name);
@@ -72,7 +71,6 @@ class Catalog
         list ($collection, $path) = $this->split($path);
         array_unshift($this->paths[$collection], $this->fixPath($path));
         $this->found = [];
-        $this->compiled = [];
     }
 
     public function appendPath(string $path) : void
@@ -80,7 +78,6 @@ class Catalog
         list ($collection, $path) = $this->split($path);
         $this->paths[$collection][] = $this->fixPath($path);
         $this->found = [];
-        $this->compiled = [];
     }
 
     public function setPaths(array $paths) : void
@@ -93,7 +90,6 @@ class Catalog
         }
 
         $this->found = [];
-        $this->compiled = [];
     }
 
     public function setExtension(string $extension) : void
@@ -104,9 +100,8 @@ class Catalog
 
     public function clear() : void
     {
-        $this->found = [];
-        $this->compiled = [];
         $this->compiler->clear();
+        $this->found = [];
     }
 
     public function compileAll() : array
@@ -134,17 +129,6 @@ class Catalog
         }
 
         return $compiled;
-    }
-
-    public function compile(string $name) : string
-    {
-        if (! isset($this->compiled[$name])) {
-            $this->compiled[$name] = ($this->compiler)(
-                $this->found[$name]
-            );
-        }
-
-        return $this->compiled[$name];
     }
 
     protected function fixPath(string $path) : string
