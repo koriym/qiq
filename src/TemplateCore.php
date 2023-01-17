@@ -152,16 +152,6 @@ abstract class TemplateCore
         return $this->catalog;
     }
 
-    public function hasFile(string $name) : bool
-    {
-        return $this->catalog->has($name);
-    }
-
-    public function getFile(string $name) : string
-    {
-        return $this->catalog->get($name);
-    }
-
     public function getContent() : string
     {
         return $this->content;
