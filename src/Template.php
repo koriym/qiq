@@ -15,10 +15,7 @@ class Template extends TemplateCore
             $__SHARED__ =& $this->refData();
             extract($__LOCAL__, EXTR_SKIP);
             extract($__SHARED__, EXTR_SKIP|EXTR_REFS);
-            require $this->getCatalog()->get(
-                $this->getCompiler(),
-                $__NAME__
-            );
+            require $this->getCompiled($__NAME__);
             return (string) ob_get_clean();
         } catch (Throwable $e) {
             while (ob_get_level() > $__OBLEVEL__) {

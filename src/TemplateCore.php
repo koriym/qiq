@@ -137,6 +137,14 @@ abstract class TemplateCore
         return $this->compiler;
     }
 
+    public function getCompiled(string $name) : string
+    {
+        return $this->catalog->get(
+            $this->compiler,
+            $name
+        );
+    }
+
     public function getContainer() : ContainerInterface
     {
         return $this->container;
