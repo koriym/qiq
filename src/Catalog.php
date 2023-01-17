@@ -18,7 +18,6 @@ class Catalog
     public function __construct(
         array $paths,
         protected string $extension,
-        protected Compiler $compiler
     ) {
         $this->setPaths($paths);
     }
@@ -43,12 +42,12 @@ class Catalog
         return null;
     }
 
-    public function get(string $name) : string
+    public function get(Compiler $compiler, string $name) : string
     {
         $source = $this->find($name);
 
         if ($source !== null) {
-            return ($this->compiler)($source);
+            return $compiler($source);
         }
 
         list ($collection, $name) = $this->split($name);
@@ -95,12 +94,6 @@ class Catalog
     public function setExtension(string $extension) : void
     {
         $this->extension = $extension;
-        $this->found = [];
-    }
-
-    public function clear() : void
-    {
-        $this->compiler->clear();
         $this->found = [];
     }
 

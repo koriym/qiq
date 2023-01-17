@@ -22,11 +22,11 @@ abstract class TemplateCore
         $catalog = new Catalog(
             (array) $paths,
             $extension,
-            $compiler,
         );
 
         return new static(
             $catalog,
+            $compiler,
             $container
         );
     }
@@ -47,6 +47,7 @@ abstract class TemplateCore
 
     public function __construct(
         private Catalog $catalog,
+        private Compiler $compiler,
         private ContainerInterface $container
     ) {
         /** @phpstan-ignore-next-line PHPStan fails to recognize the type. */
@@ -129,6 +130,11 @@ abstract class TemplateCore
     public function getView() : ?string
     {
         return $this->view;
+    }
+
+    public function getCompiler() : Compiler
+    {
+        return $this->compiler;
     }
 
     public function getContainer() : ContainerInterface

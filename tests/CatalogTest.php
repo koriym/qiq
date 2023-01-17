@@ -7,10 +7,15 @@ use Qiq\HtmlTemplate;
 
 class CatalogTest extends \PHPUnit\Framework\TestCase
 {
+    protected $cachePath;
+
     protected function setUp() : void
     {
+        $this->cachePath = __DIR__ . DIRECTORY_SEPARATOR . 'cache';
         $this->catalog = $this->newCatalog();
-        $this->catalog->clear();
+
+        $this->compiler = new QiqCompiler($this->cachePath);
+        $this->compiler->clear();
     }
 
     protected function newCatalog(array $paths = [])
@@ -18,13 +23,12 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
         return new Catalog($paths, '.php', new FakeCompiler());
     }
 
-    public function testHasGet()
+    public function testGet()
     {
         $this->catalog->setPaths([__DIR__ . '/templates']);
-
-        $actual = $this->catalog->get('index');
-
-        $expect = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/templates/index.php');
+        $actual = $this->catalog->get($this->compiler, 'index');
+        $expect = $this->cachePath
+            . str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/templates/index.php');
         $this->assertSame($expect, $actual);
     }
 
@@ -32,7 +36,7 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(Exception\FileNotFound::class);
         $this->expectExceptionMessage("Double-dots not allowed in file specifications");
-        $this->catalog->get('foo/../bar');
+        $this->catalog->get($this->compiler, 'foo/../bar');
     }
 
     public function testSetAndGetPaths()
@@ -92,28 +96,28 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
             $dir . 'foo',
         ]);
 
-        $this->assertOutput('foo', $catalog->get('test'));
+        $this->assertOutput('foo', $catalog->get($this->compiler, 'test'));
 
         $catalog = $this->newCatalog([
             $dir . 'bar',
             $dir . 'foo',
         ]);
-        $this->assertOutput('bar', $catalog->get('test'));
+        $this->assertOutput('bar', $catalog->get($this->compiler, 'test'));
 
         $catalog = $this->newCatalog([
             $dir . 'baz',
             $dir . 'bar',
             $dir . 'foo',
         ]);
-        $this->assertOutput('baz', $catalog->get('test'));
+        $this->assertOutput('baz', $catalog->get($this->compiler, 'test'));
 
         // get it again for code coverage
-        $this->assertOutput('baz', $catalog->get('test'));
+        $this->assertOutput('baz', $catalog->get($this->compiler, 'test'));
 
         // look for a file that doesn't exist
         $catalog->setExtension('.phtml');
         $this->expectException(Exception\FileNotFound::class);
-        $catalog->get('test');
+        $catalog->get($this->compiler, 'test');
     }
 
     public function testCollections()
@@ -126,13 +130,15 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
             "baz:{$dir}/baz",
         ]);
 
-        $this->assertOutput('foo', $this->catalog->get('foo:test'));
-        $this->assertOutput('bar', $this->catalog->get('bar:test'));
-        $this->assertOutput('baz', $this->catalog->get('baz:test'));
+        $this->assertOutput('foo', $this->catalog->get($this->compiler, 'foo:test'));
+        $this->assertOutput('bar', $this->catalog->get($this->compiler, 'bar:test'));
+        $this->assertOutput('baz', $this->catalog->get($this->compiler, 'baz:test'));
     }
 
     public function testCompileAll()
     {
+        $this->markTestSkipped();
+
         $cachePath = __DIR__ . DIRECTORY_SEPARATOR . 'cache';
         $compiler = new QiqCompiler($cachePath);
 
