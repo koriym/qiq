@@ -171,8 +171,8 @@ class QiqTokenTest extends \PHPUnit\Framework\TestCase
         $php = '<?= $this->textField([' . PHP_EOL . '    "name" => "street", "value" => $street' . PHP_EOL . ']) ?>';
         $this->assertPhp($php, $qiq);
 
-        $qiq = '{{= strtoupper($foo) }}';
-        $php = '<?= strtoupper($foo) ?>';
+        $qiq = '{{= \strtoupper($foo) }}';
+        $php = '<?= \strtoupper($foo) ?>';
         $this->assertPhp($php, $qiq);
     }
 

@@ -1,5 +1,3 @@
-TemplateTemplateCore is now TemplateCore; shouldn't matter, as you only worked with Template.
-
 TemplateLocator is now Catalog.
 
 HelperLocator is now Container.

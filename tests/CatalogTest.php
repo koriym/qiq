@@ -9,7 +9,6 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp() : void
     {
-        $this->template = Template::new();
         $this->catalog = $this->newCatalog();
         $this->catalog->clear();
     }
@@ -24,21 +23,21 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
         $this->catalog->setPaths([__DIR__ . '/templates']);
 
         $this->assertTrue($this->catalog->has('index'));
-        $actual = $this->catalog->get($this->template, 'index');
+        $actual = $this->catalog->get('index');
 
         $expect = str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/templates/index.php');
         $this->assertSame($expect, $actual);
 
         $this->assertFalse($this->catalog->has('no-such-template'));
         $this->expectException(Exception\FileNotFound::class);
-        $this->catalog->get($this->template,'no-such-template');
+        $this->catalog->get('no-such-template');
     }
 
     public function testDoubleDots()
     {
         $this->expectException(Exception\FileNotFound::class);
         $this->expectExceptionMessage("Double-dots not allowed in file specifications");
-        $this->catalog->get($this->template, 'foo/../bar');
+        $this->catalog->get('foo/../bar');
     }
 
     public function testSetAndGetPaths()
@@ -98,28 +97,28 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
             $dir . 'foo',
         ]);
 
-        $this->assertOutput('foo', $catalog->get($this->template, 'test'));
+        $this->assertOutput('foo', $catalog->get('test'));
 
         $catalog = $this->newCatalog([
             $dir . 'bar',
             $dir . 'foo',
         ]);
-        $this->assertOutput('bar', $catalog->get($this->template, 'test'));
+        $this->assertOutput('bar', $catalog->get('test'));
 
         $catalog = $this->newCatalog([
             $dir . 'baz',
             $dir . 'bar',
             $dir . 'foo',
         ]);
-        $this->assertOutput('baz', $catalog->get($this->template, 'test'));
+        $this->assertOutput('baz', $catalog->get('test'));
 
         // get it again for code coverage
-        $this->assertOutput('baz', $catalog->get($this->template, 'test'));
+        $this->assertOutput('baz', $catalog->get('test'));
 
         // look for a file that doesn't exist
         $catalog->setExtension('.phtml');
         $this->expectException(Exception\FileNotFound::class);
-        $catalog->get($this->template, 'test');
+        $catalog->get('test');
     }
 
     public function testCollections()
@@ -132,9 +131,9 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
             "baz:{$dir}/baz",
         ]);
 
-        $this->assertOutput('foo', $this->catalog->get($this->template, 'foo:test'));
-        $this->assertOutput('bar', $this->catalog->get($this->template, 'bar:test'));
-        $this->assertOutput('baz', $this->catalog->get($this->template, 'baz:test'));
+        $this->assertOutput('foo', $this->catalog->get('foo:test'));
+        $this->assertOutput('bar', $this->catalog->get('bar:test'));
+        $this->assertOutput('baz', $this->catalog->get('baz:test'));
     }
 
     public function testCompileAll()

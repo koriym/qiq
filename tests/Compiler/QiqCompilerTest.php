@@ -11,7 +11,6 @@ class QiqCompilerTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp() : void
     {
-        $this->template = Template::new();
         $this->sourceDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'templates';
         $this->cachePath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'cache';
         $this->compiler = new QiqCompiler($this->cachePath);
@@ -20,7 +19,7 @@ class QiqCompilerTest extends \PHPUnit\Framework\TestCase
 
     protected function compile(string $name)
     {
-        return ($this->compiler)($this->template, $this->sourceFile($name));
+        return ($this->compiler)($this->sourceFile($name));
     }
 
     protected function assertReadable(string $file)

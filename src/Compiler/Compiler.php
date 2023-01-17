@@ -7,7 +7,7 @@ use Qiq\TemplateCore;
 
 interface Compiler
 {
-    public function __invoke(TemplateCore $template, string $source) : string;
+    public function __invoke(string $source) : string;
 
     public function clear() : void;
 }

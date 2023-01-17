@@ -79,7 +79,7 @@ class QiqToken
         $this->fixEcho();
     }
 
-    public function compile(TemplateCore $template) : string
+    public function compile() : string
     {
         $code = $this->firstWord . $this->remainder;
         $char = substr($this->firstWord, 0, 1);
@@ -89,11 +89,8 @@ class QiqToken
             (ctype_alpha($char) || $char === '_')
             && ! defined($this->firstWord)
             && ! in_array($this->firstWord, static::KNOWN)
-            && method_exists($template, $this->firstWord)
         ) {
-            // alphabetic or underscore, but not defined and not known,
-            // and the helper locator has it.
-            //
+            // alphabetic or underscore, but not defined and not known.
             // treat as a helper. set indent so helper can use it if needed.
             $indent = $this->indent($this->leadingSpaceOuter);
             $code = "\$this->{$code}";

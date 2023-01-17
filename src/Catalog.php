@@ -46,10 +46,10 @@ class Catalog
         return false;
     }
 
-    public function get(TemplateCore $template, string $name) : string
+    public function get(string $name) : string
     {
         if ($this->has($name)) {
-            return $this->compile($template, $name);
+            return $this->compile($name);
         }
 
         list ($collection, $name) = $this->split($name);
@@ -109,7 +109,7 @@ class Catalog
         $this->compiler->clear();
     }
 
-    public function compileAll(TemplateCore $template) : array
+    public function compileAll() : array
     {
         $compiled = [];
 
@@ -127,7 +127,7 @@ class Catalog
                 foreach ($files as $file) {
                     $source = $file->getPathname();
                     if (str_ends_with($source, $this->extension)) {
-                        $compiled[] = ($this->compiler)($template, $source);
+                        $compiled[] = ($this->compiler)($source);
                     }
                 }
             }
@@ -136,11 +136,10 @@ class Catalog
         return $compiled;
     }
 
-    public function compile(TemplateCore $template, string $name) : string
+    public function compile(string $name) : string
     {
         if (! isset($this->compiled[$name])) {
             $this->compiled[$name] = ($this->compiler)(
-                $template,
                 $this->found[$name]
             );
         }

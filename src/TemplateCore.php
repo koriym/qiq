@@ -159,7 +159,7 @@ abstract class TemplateCore
 
     public function getFile(string $name) : string
     {
-        return $this->catalog->get($this, $name);
+        return $this->catalog->get($name);
     }
 
     public function getContent() : string
