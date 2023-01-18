@@ -119,7 +119,7 @@ Assigned variables are no longer addressed using `$this`. That is, when you assi
 
 Assigned variables are still shared among templates by reference, so changes to an assigned variable in one template will be recognized in all other templates.
 
-Local variables set at `render()`-time are *not* shared (this is the current behavior as well, so no changes there).
+Local variables set at `render()`-time are *not* shared (this is the current behavior, so no changes there).
 
 This opens up a greater chance of assigned-vs-local conflicts, e.g. using `foreach ($items as $item)` when `$item` has *also* been assigned. The foreach() will overwrite the assigned `$item` value. (With the older way, `foreach ($this->items as $item)` has almost no chance of overwriting an assigned value.)
 
@@ -153,7 +153,7 @@ To make enable static analysis of template variables, document them in the templ
 <?= $this->rot13($bar) ?>
 ```
 
-This works for files using Qiq `{{ ... }}` syntax as well:
+This also works for files using Qiq `{{ ... }}` syntax:
 
 ```qiq
 {{ /** @var Qiq\Rendering&MyHelpers $this */ }}
@@ -164,7 +164,7 @@ This works for files using Qiq `{{ ... }}` syntax as well:
 
 However, static analysis of templates using Qiq syntax must be done against the **compiled** version of the template. That means you need to compile all the templates *before* running static analysis on them, and point the analyzer to the directory holding the compiled templates.
 
-A `@var ... $this` typehint of that complexity might be off-putting. If so, consider extending the _Template_ class as well, overriding the constructor, and adding a `@mixin` tag pointing to the extended _Helpers_ object.
+A `@var ... $this` typehint of that complexity might be off-putting. If so, consider extending the _Template_ class, overriding the constructor, and adding a `@mixin` tag pointing to the extended _Helpers_ object.
 
 ```php
 /**
@@ -188,4 +188,4 @@ Now the template file typehint can be reduced to:
 {{ /** @var MyTemplate $this */ }}
 ```
 
-You may find constructor overrides to be more amenable to autowiring dependency injection as well, in that you can typehint to a specific Catalog or Compiler, and call the parent constructor thereafter.
+You may find constructor overrides to be more amenable to autowiring dependency injection, in that you can typehint to a specific Catalog or Compiler, and call the parent constructor thereafter.
