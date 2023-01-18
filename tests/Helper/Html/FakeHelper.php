@@ -1,7 +1,7 @@
 <?php
 namespace Qiq\Helper\Html;
 
-class FakeHelper extends HtmlHelper
+class FakeHelper extends TagHelper
 {
     public function __invoke(string $noun) : string
     {

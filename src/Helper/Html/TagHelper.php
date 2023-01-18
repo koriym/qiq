@@ -5,7 +5,7 @@ namespace Qiq\Helper\Html;
 
 use Qiq\Indent;
 
-abstract class HtmlHelper
+abstract class TagHelper
 {
     public function __construct(
         protected Escape $escape,

@@ -5,7 +5,7 @@ namespace Qiq\Helper\Html;
 
 use Qiq\Indent;
 
-class Select extends HtmlHelper
+class Select extends TagHelper
 {
     public function __invoke(array $attr) : string
     {

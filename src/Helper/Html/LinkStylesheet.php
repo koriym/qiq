@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Qiq\Helper\Html;
 
-class LinkStylesheet extends HtmlHelper
+class LinkStylesheet extends TagHelper
 {
     public function __invoke(string $href, array $attr = []) : string
     {

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Qiq\Helper\Html;
 
-class Textarea extends HtmlHelper
+class Textarea extends TagHelper
 {
     public function __invoke(array $attr) : string
     {

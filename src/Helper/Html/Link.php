@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Qiq\Helper\Html;
 
-class Link extends HtmlHelper
+class Link extends TagHelper
 {
     public function __invoke(string $rel, string $href, array $attr = []) : string
     {

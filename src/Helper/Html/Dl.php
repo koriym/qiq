@@ -5,7 +5,7 @@ namespace Qiq\Helper\Html;
 
 use Qiq\Indent;
 
-class Dl extends HtmlHelper
+class Dl extends TagHelper
 {
     public function __invoke(array $terms, array $attr = []) : string
     {
