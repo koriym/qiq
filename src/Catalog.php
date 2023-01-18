@@ -91,7 +91,7 @@ class Catalog
         $this->found = [];
     }
 
-    public function compileAll(Compiler $compiler) : array
+    public function compile(Compiler $compiler) : array
     {
         $compiled = [];
 

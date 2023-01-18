@@ -7,8 +7,6 @@ use Psr\Container\ContainerInterface;
 
 class Helpers
 {
-    use Section\SectionHelperMethods;
-
     protected ContainerInterface $container;
 
     public function __construct(ContainerInterface $container = null)

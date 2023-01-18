@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Qiq\Compiler;
 
-use Qiq\TemplateCore;
-
 interface Compiler
 {
     public function __invoke(string $source) : string;

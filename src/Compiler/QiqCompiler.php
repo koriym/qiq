@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Qiq\Compiler;
 
 use FilesystemIterator;
-use Qiq\TemplateCore;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;

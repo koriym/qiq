@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Qiq\Compiler;
 
-use Qiq\TemplateCore;
-
 class QiqToken
 {
     protected const INDENT = [

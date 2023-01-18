@@ -5,7 +5,7 @@ namespace Qiq;
 
 use Throwable;
 
-class Template extends TemplateCore
+class Template extends Kernel
 {
     public function render(string $__NAME__, array $__LOCAL__ = []) : string
     {
@@ -17,11 +17,10 @@ class Template extends TemplateCore
             extract($__SHARED__, EXTR_SKIP|EXTR_REFS);
             require $this->getCompiled($__NAME__);
             return (string) ob_get_clean();
-        } catch (Throwable $e) {
+        } finally {
             while (ob_get_level() > $__OBLEVEL__) {
                 ob_end_clean();
             }
-            throw $e;
         }
     }
 }
