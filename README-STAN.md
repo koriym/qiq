@@ -188,4 +188,4 @@ Now the template file typehint can be reduced to:
 {{ /** @var MyTemplate $this */ }}
 ```
 
-You may find constructor overrides to be more amenable to autowiring dependency injection as well, in that you can typehint to a specific Catalog or Compiler as well, and call the parent constructor thereafter.
+You may find constructor overrides to be more amenable to autowiring dependency injection as well, in that you can typehint to a specific Catalog or Compiler, and call the parent constructor thereafter.
