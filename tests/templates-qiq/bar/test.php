@@ -1,6 +1,6 @@
 {{
 /**
- * @var \Qiq\TemplateFile&\Qiq\Helper\Html\HtmlHelpers $this
+ * @var \Qiq\Rendering&\Qiq\Helper\Html\HtmlHelpers $this
  */
 }}
 {{= 'bar' }}

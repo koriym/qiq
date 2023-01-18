@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Qiq;
 
-interface TemplateFile
+interface Rendering
 {
     public function setIndent(string $base) : void;
 

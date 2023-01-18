@@ -8,7 +8,7 @@ use Qiq\Compiler\QiqCompiler;
 use Qiq\Helper\Html\HtmlHelpers;
 use stdClass;
 
-abstract class TemplateCore implements TemplateFile
+abstract class TemplateCore implements Rendering
 {
     static public function new(
         string|array $paths = [],
