@@ -10,26 +10,20 @@ use stdClass;
 
 abstract class Kernel implements Rendering
 {
-    static public function new(
+    public static function new(
         string|array $paths = [],
         string $extension = '.php',
         Helpers $helpers = null,
         Compiler $compiler = null,
     ) : static
     {
-        $catalog = new Catalog(
-            (array) $paths,
-            $extension,
-        );
-
-        $compiler ??= new QiqCompiler();
-
-        $helpers ??= new HtmlHelpers();
-
         return new static(
-            $catalog,
-            $compiler,
-            $helpers
+            new Catalog(
+                (array) $paths,
+                $extension,
+            ),
+            $compiler ?? new QiqCompiler(),
+            $helpers ?? new HtmlHelpers(),
         );
     }
 
