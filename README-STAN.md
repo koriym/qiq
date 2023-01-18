@@ -147,7 +147,7 @@ template file:
 ```html+php
 <?php
 /**
- * @var Qiq\Rendering&Qiq\Helper\Html\HtmlHelpers $this
+ * @var Qiq\Rendering&MyHelpers $this
  * @var string $bar
  */
 ?>
@@ -158,7 +158,7 @@ template file:
 This works for files using Qiq `{{ ... }}` syntax as well:
 
 ```qiq
-{{ /** @var Qiq\Rendering&Qiq\Helper\Html\HtmlHelpers $this */ }}
+{{ /** @var Qiq\Rendering&MyHelpers $this */ }}
 {{ /** @var string $bar */ }}
 
 {{= rot13 ($bar) }}
