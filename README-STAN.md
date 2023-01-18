@@ -138,11 +138,9 @@ To enable static analysis inside template files, the template file must have a `
 <?= $this->rot13() ?>
 ```
 
-You can now run static analysis on that template file, and the analyzer
-should recognize that `$this->rot13()` is a method on the HtmlHelpers class.
+You can now run static analysis on that template file, and the analyzer should recognize that `$this->rot13()` is a method on the HtmlHelpers class.
 
-To make enable static analysis of template variables, document them in the
-template file:
+To make enable static analysis of template variables, document them in the template file:
 
 ```html+php
 <?php
@@ -164,7 +162,30 @@ This works for files using Qiq `{{ ... }}` syntax as well:
 {{= rot13 ($bar) }}
 ```
 
-However, static analysis of templates using Qiq syntax must be done against
-the **compiled** version of the template. That means you need to compile all
-the templates *before* running static analysis on them, and point the
-analyzer to the directory holding the compiled templates.
+However, static analysis of templates using Qiq syntax must be done against the **compiled** version of the template. That means you need to compile all the templates *before* running static analysis on them, and point the analyzer to the directory holding the compiled templates.
+
+A `@var ... $this` typehint of that complexity might be off-putting. If so, consider extending the _Template_ class as well, overriding the constructor, and adding a `@mixin` tag pointing to the extended _Helpers_ object.
+
+```php
+/**
+ * @mixin MyHelpers
+ */
+class MyTemplate extends \Qiq\Template
+{
+    public function __construct(
+        Catalog $catalog,
+        Compiler $compiler,
+        MyHelpers $helpers
+    ) {
+        parent::__construct($catalog, $compiler, $helpers);
+    }
+}
+```
+
+Now the template file typehint can be reduced to:
+
+```qiq
+{{ /** @var MyTemplate $this */ }}
+```
+
+You may find constructor overrides to be more amenable to autowiring dependency injection as well, in that you can typehint to a specific Catalog or Compiler as well, and call the parent constructor thereafter.
