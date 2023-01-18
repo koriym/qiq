@@ -138,7 +138,7 @@ To enable static analysis inside template files, the template file must have a `
 <?= $this->anchor(...) ?>
 ```
 
-You can now run static analysis on that template file, and the analyzer should recognize that `$this->anchor()` is a method on the MyHelpers class.
+You can now run static analysis on that template file, and the analyzer should recognize that `$this->anchor()` is a method on the HtmlHelpers class.
 
 To make enable static analysis of template variables, document them in the template file:
 
