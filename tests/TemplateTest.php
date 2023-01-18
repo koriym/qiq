@@ -29,14 +29,19 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function testGetters()
     {
         $this->assertInstanceOf(Catalog::class, $this->template->getCatalog());
-        $this->assertInstanceOf(Container::class, $this->template->getContainer());
+        $this->assertInstanceOf(Helpers::class, $this->template->getHelpers());
     }
 
     public function testSetIndent()
     {
+        $container = new Container();
+        $indent = $container->get(Indent::class);
+
+        $template = Template::new(helpers: new Helpers($container));
+
         $expect = 'foo';
-        $this->template->setIndent($expect);
-        $actual = $this->template->getContainer()->get(Indent::class)->get();
+        $template->setIndent($expect);
+        $actual = $indent->get();
         $this->assertSame($expect, $actual);
     }
 

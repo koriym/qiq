@@ -66,7 +66,7 @@ class Container implements ContainerInterface
     {
         if (! $this->has($class)) {
             throw new Exception\ObjectNotFound(
-                "Helper of class '{$class}' does not exist."
+                "Object of class '{$class}' does not exist."
             );
         }
 

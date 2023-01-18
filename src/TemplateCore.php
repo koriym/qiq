@@ -3,35 +3,35 @@ declare(strict_types=1);
 
 namespace Qiq;
 
-use Psr\Container\ContainerInterface;
 use Qiq\Compiler\Compiler;
 use Qiq\Compiler\QiqCompiler;
+use Qiq\Helper\Html\HtmlHelpers;
 use stdClass;
 
-abstract class TemplateCore
+abstract class TemplateCore implements TemplateFile
 {
     static public function new(
         string|array $paths = [],
         string $extension = '.php',
-        ContainerInterface $container = null,
+        Helpers $helpers = null,
         Compiler $compiler = null,
     ) : static
     {
-        $container ??= new Container();
-        $compiler ??= new QiqCompiler();
         $catalog = new Catalog(
             (array) $paths,
             $extension,
         );
 
+        $compiler ??= new QiqCompiler();
+
+        $helpers ??= new HtmlHelpers();
+
         return new static(
             $catalog,
             $compiler,
-            $container
+            $helpers
         );
     }
-
-    private Indent $indent;
 
     private string $content = '';
 
@@ -48,10 +48,8 @@ abstract class TemplateCore
     public function __construct(
         private Catalog $catalog,
         private Compiler $compiler,
-        private ContainerInterface $container
+        private Helpers $helpers
     ) {
-        /** @phpstan-ignore-next-line PHPStan fails to recognize the type. */
-        $this->indent = $this->container->get(Indent::class);
     }
 
     public function __invoke() : string
@@ -65,6 +63,11 @@ abstract class TemplateCore
         }
 
         return $this->render($layout);
+    }
+
+    public function __call(string $func, array $args): mixed
+    {
+        return $this->helpers->$func(...$args);
     }
 
     public function __get(string $key) : mixed
@@ -89,7 +92,7 @@ abstract class TemplateCore
 
     public function setIndent(string $base) : void
     {
-        $this->indent->set($base);
+        $this->helpers->setIndent($base);
     }
 
     public function setData(array|stdClass $data) : void
@@ -145,20 +148,9 @@ abstract class TemplateCore
         );
     }
 
-    public function getContainer() : ContainerInterface
+    public function getHelpers() : Helpers
     {
-        return $this->container;
-    }
-
-    /**
-     * @template T of object
-     * @param class-string<T> $class
-     * @return T of object
-     */
-    public function getObject(string $class) : object
-    {
-        /** @var T of object */
-        return $this->container->get($class);
+        return $this->helpers;
     }
 
     public function getCatalog() : Catalog

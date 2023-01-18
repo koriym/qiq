@@ -1,21 +1,21 @@
 <?php
 namespace Qiq\Compiler;
 
-use Qiq\HtmlTemplate;
+use Qiq\Template;
 
 class QiqTokenTest extends \PHPUnit\Framework\TestCase
 {
-    protected HtmlTemplate $htmlTemplate;
+    protected Template $template;
 
     protected function setUp() : void
     {
-        $this->htmlTemplate = HtmlTemplate::new();
+        $this->template = Template::new();
     }
 
     protected function assertPhp(string $php, string $qiq)
     {
         $token = QiqToken::new($qiq);
-        $this->assertSame($php, $token->compile($this->htmlTemplate));
+        $this->assertSame($php, $token->compile($this->template));
     }
 
     public function testBadToken()

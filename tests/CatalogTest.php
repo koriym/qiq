@@ -3,7 +3,7 @@ namespace Qiq;
 
 use Qiq\Compiler\QiqCompiler;
 use Qiq\Compiler\FakeCompiler;
-use Qiq\HtmlTemplate;
+use Qiq\Template;
 
 class CatalogTest extends \PHPUnit\Framework\TestCase
 {
@@ -18,9 +18,9 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
         $this->compiler->clear();
     }
 
-    protected function newCatalog(array $paths = [])
+    protected function newCatalog(array $paths = [], $extension = '.php')
     {
-        return new Catalog($paths, '.php', new FakeCompiler());
+        return new Catalog($paths, $extension);
     }
 
     public function testGet()
@@ -115,7 +115,7 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
         $this->assertOutput('baz', $catalog->get($this->compiler, 'test'));
 
         // look for a file that doesn't exist
-        $catalog->setExtension('.phtml');
+        $catalog = $this->newCatalog();
         $this->expectException(Exception\FileNotFound::class);
         $catalog->get($this->compiler, 'test');
     }
@@ -137,20 +137,20 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
 
     public function testCompileAll()
     {
-        $this->markTestSkipped();
+        $this->markTestSkipped('have to work up new compiler stuff');
 
         $cachePath = __DIR__ . DIRECTORY_SEPARATOR . 'cache';
         $compiler = new QiqCompiler($cachePath);
 
         $sourceDir = __DIR__ . DIRECTORY_SEPARATOR . 'templates-qiq';
-        $htmlTemplate = HtmlTemplate::new(
+        $template = Template::new(
             paths: [$sourceDir],
             extension: '.php',
             compiler: $compiler
         );
 
         $compiler->clear();
-        $actual = $htmlTemplate->getCatalog()->compileAll($htmlTemplate);
+        $actual = $template->getCatalog()->compileAll($template);
         foreach ($actual as $file) {
             $this->assertTrue(str_starts_with($file, $cachePath));
         }

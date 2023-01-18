@@ -16,11 +16,10 @@ class Catalog
     protected array $found = [];
 
     public function __construct(
-        array $paths,
-        protected string $extension,
+        array $paths = [],
+        protected string $extension = '.php',
     ) {
         $this->setPaths($paths);
-        $this->setExtension($extension);
     }
 
     protected function find(string $key) : ?string
@@ -92,13 +91,7 @@ class Catalog
         $this->found = [];
     }
 
-    public function setExtension(string $extension) : void
-    {
-        $this->extension = $extension;
-        $this->found = [];
-    }
-
-    public function compileAll() : array
+    public function compileAll(Compiler $compiler) : array
     {
         $compiled = [];
 
@@ -116,7 +109,7 @@ class Catalog
                 foreach ($files as $file) {
                     $source = $file->getPathname();
                     if (str_ends_with($source, $this->extension)) {
-                        $compiled[] = ($this->compiler)($source);
+                        $compiled[] = $compiler($source);
                     }
                 }
             }

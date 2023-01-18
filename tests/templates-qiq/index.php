@@ -1,6 +1,6 @@
 {{
 /**
- * @var \Qiq\HtmlTemplate $this
+ * @var \Qiq\TemplateFile&\Qiq\Helper\Html\HtmlHelpers $this
  * @var string $name
  */
 }}
