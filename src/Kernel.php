@@ -64,26 +64,6 @@ abstract class Kernel implements Rendering
         return $this->helpers->$func(...$args);
     }
 
-    public function __get(string $key) : mixed
-    {
-        return $this->data[$key];
-    }
-
-    public function __set(string $key, mixed $val) : void
-    {
-        $this->data[$key] = $val;
-    }
-
-    public function __isset(string $key) : bool
-    {
-        return isset($this->data[$key]);
-    }
-
-    public function __unset(string $key) : void
-    {
-        unset($this->data[$key]);
-    }
-
     public function setIndent(string $base) : void
     {
         $this->helpers->setIndent($base);

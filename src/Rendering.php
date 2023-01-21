@@ -3,13 +3,27 @@ declare(strict_types=1);
 
 namespace Qiq;
 
+use stdClass;
+
 interface Rendering
 {
     public function setIndent(string $base) : void;
 
+    public function setData(array|stdClass $data) : void;
+
+    public function addData(array|stdClass $data) : void;
+
     public function getData() : array;
 
+    public function &refData() : array;
+
     public function setLayout(?string $layout) : void;
+
+    public function getLayout() : ?string;
+
+    public function setView(?string $view) : void;
+
+    public function getView() : ?string;
 
     public function getContent() : string;
 

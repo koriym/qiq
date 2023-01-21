@@ -135,22 +135,20 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
         $this->assertOutput('baz', $this->catalog->get($this->compiler, 'baz:test'));
     }
 
-    public function testCompileAll()
+    public function testCompile()
     {
-        $this->markTestSkipped('have to work up new compiler stuff');
-
         $cachePath = __DIR__ . DIRECTORY_SEPARATOR . 'cache';
         $compiler = new QiqCompiler($cachePath);
+        $compiler->clear();
 
         $sourceDir = __DIR__ . DIRECTORY_SEPARATOR . 'templates-qiq';
-        $template = Template::new(
+        $catalog = new Catalog(
             paths: [$sourceDir],
             extension: '.php',
-            compiler: $compiler
         );
 
-        $compiler->clear();
-        $actual = $template->getCatalog()->compileAll($template);
+        $actual = $catalog->compile($compiler);
+
         foreach ($actual as $file) {
             $this->assertTrue(str_starts_with($file, $cachePath));
         }

@@ -42,6 +42,11 @@ class Catalog
         return null;
     }
 
+    public function has(string $name) : bool
+    {
+        return $this->find($name) !== null;
+    }
+
     public function get(Compiler $compiler, string $name) : string
     {
         $source = $this->find($name);

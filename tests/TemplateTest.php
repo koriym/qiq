@@ -49,11 +49,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['foo' => 'bar'];
         $this->template->setData($data);
-        $this->assertSame('bar', $this->template->foo);
 
         $data = ['baz' => 'dib'];
         $this->template->addData($data);
-        $this->assertSame('dib', $this->template->baz);
 
         $expect = ['foo' => 'bar', 'baz' => 'dib'];
         $actual = (array) $this->template->getData();
