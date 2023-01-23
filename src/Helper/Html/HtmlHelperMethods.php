@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Qiq\Helper\Html;
 
+use Stringable;
+
 trait HtmlHelperMethods
 {
-    public function a(array|string $raw) : string
+    public function a(null|bool|int|float|string|Stringable|array $raw) : string
     {
         return $this
             ->get(Escape::class)
@@ -33,7 +35,7 @@ trait HtmlHelperMethods
             ->__invoke($attr);
     }
 
-    public function c(string $raw) : string
+    public function c(null|bool|int|float|string|Stringable $raw) : string
     {
         return $this
             ->get(Escape::class)
@@ -109,7 +111,7 @@ trait HtmlHelperMethods
             ->__invoke($attr);
     }
 
-    public function h(string $raw) : string
+    public function h(null|bool|int|float|string|Stringable $raw) : string
     {
         return $this
             ->get(Escape::class)
@@ -151,7 +153,7 @@ trait HtmlHelperMethods
             ->__invoke($items);
     }
 
-    public function j(string $raw) : string
+    public function j(null|bool|int|float|string|Stringable $raw) : string
     {
         return $this
             ->get(Escape::class)
@@ -305,7 +307,7 @@ trait HtmlHelperMethods
             ->__invoke($attr);
     }
 
-    public function u(string $raw) : string
+    public function u(null|bool|int|float|string|Stringable $raw) : string
     {
         return $this
             ->get(Escape::class)

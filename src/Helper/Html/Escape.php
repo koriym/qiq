@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Qiq\Helper\Html;
 
 use Laminas\Escaper\Escaper;
+use Stringable;
 
 class Escape
 {
@@ -14,10 +15,10 @@ class Escape
         $this->escaper = new Escaper($encoding);
     }
 
-    public function a(string|array $raw) : string
+    public function a(null|bool|int|float|string|Stringable|array $raw) : string
     {
-        if (is_string($raw)) {
-            return $this->escaper->escapeHtmlAttr($raw);
+        if (! is_array($raw)) {
+            return $this->escaper->escapeHtmlAttr((string) $raw);
         }
 
         $esc = '';
@@ -54,23 +55,23 @@ class Escape
         return rtrim($esc);
     }
 
-    public function c(string $raw) : string
+    public function c(null|bool|int|float|string|Stringable $raw) : string
     {
-        return $this->escaper->escapeCss($raw);
+        return $this->escaper->escapeCss((string) $raw);
     }
 
-    public function h(string $raw) : string
+    public function h(null|bool|int|float|string|Stringable $raw) : string
     {
-        return $this->escaper->escapeHtml($raw);
+        return $this->escaper->escapeHtml((string) $raw);
     }
 
-    public function j(string $raw) : string
+    public function j(null|bool|int|float|string|Stringable $raw) : string
     {
-        return $this->escaper->escapeJs($raw);
+        return $this->escaper->escapeJs((string) $raw);
     }
 
-    public function u(string $raw) : string
+    public function u(null|bool|int|float|string|Stringable $raw) : string
     {
-        return $this->escaper->escapeUrl($raw);
+        return $this->escaper->escapeUrl((string) $raw);
     }
 }
