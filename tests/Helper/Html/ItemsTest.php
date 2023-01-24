@@ -5,7 +5,7 @@ class ItemsTest extends HtmlHelperTest
 {
     public function test()
     {
-        $actual = $this->helper([
+        $actual = $this->helpers->items([
             '>foo',
             '>bar',
             '>baz',

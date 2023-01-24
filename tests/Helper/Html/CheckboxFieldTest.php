@@ -5,7 +5,7 @@ class CheckboxFieldTest extends HtmlHelperTest
 {
     public function test()
     {
-        $actual = $this->helper([
+        $actual = $this->helpers->checkboxField([
             'name' => 'foo',
             'value' => ['yes', 'no'],
             '_default' => '',
@@ -26,7 +26,7 @@ class CheckboxFieldTest extends HtmlHelperTest
 
     public function testSingleOption()
     {
-        $actual = $this->helper([
+        $actual = $this->helpers->checkboxField([
             'name' => 'foo',
             'value' => '1',
             '_default' => '0',
@@ -43,7 +43,7 @@ class CheckboxFieldTest extends HtmlHelperTest
 
     public function testScalarChecked()
     {
-        $actual = $this->helper([
+        $actual = $this->helpers->checkboxField([
             'name' => 'foo',
             'value' => 'no',
             '_options' => [

@@ -5,7 +5,7 @@ class FormTest extends HtmlHelperTest
 {
     public function test()
     {
-        $actual = $this->helper([
+        $actual = $this->helpers->form([
             'method' => 'post',
             'action' => 'http://example.com/',
         ]);

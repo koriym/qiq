@@ -6,7 +6,7 @@ use Qiq\Indent;
 
 abstract class HtmlHelperTest extends \PHPUnit\Framework\TestCase
 {
-    protected $helper;
+    protected $helpers;
 
     protected $container;
 
@@ -15,12 +15,6 @@ abstract class HtmlHelperTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
         $this->container = new Container();
         $this->container->get(Indent::class)->set('');
-        $class = substr(get_class($this), 0, -4);
-        $this->helper = $this->container->get($class);
-    }
-
-    protected function helper(...$args)
-    {
-        return ($this->helper)(...$args);
+        $this->helpers = $this->container->get(HtmlHelpers::class);
     }
 }

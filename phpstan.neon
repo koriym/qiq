@@ -1,6 +1,5 @@
 parameters:
     level: max
-    checkMissingIterableValueType: false
     paths:
         - src
         - tests/templates/static-analysis.php

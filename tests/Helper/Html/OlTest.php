@@ -5,7 +5,7 @@ class OlTest extends HtmlHelperTest
 {
     public function test()
     {
-        $actual = $this->helper(
+        $actual = $this->helpers->ol(
             [
                 '>foo',
                 '>bar',
@@ -26,7 +26,7 @@ class OlTest extends HtmlHelperTest
 
         $this->assertSame($expect, $actual);
 
-        $actual = $this->helper([]);
+        $actual = $this->helpers->ol([]);
         $expect = '';
         $this->assertSame($expect, $actual);
     }

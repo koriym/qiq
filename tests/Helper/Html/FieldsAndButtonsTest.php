@@ -3,16 +3,11 @@ namespace Qiq\Helper\Html;
 
 use Qiq\Indent;
 
-class InputFieldTest extends HtmlHelperTest
+class FieldsAndButtonsTest extends HtmlHelperTest
 {
-    protected function newHelper()
-    {
-        return new InputField(new Escape(), new Indent());
-    }
-
     public function testInputField()
     {
-        $actual = $this->helper([
+        $actual = $this->helpers->inputField([
             'type' => 'fake',
             'name' => 'fake-name',
             'value' => 'fake-value',
@@ -26,10 +21,9 @@ class InputFieldTest extends HtmlHelperTest
     /**
      * @dataProvider provideTypes
      */
-    public function testTypes(string $class, string $type)
+    public function testTypes(string $method, string $type)
     {
-        $input = new $class(new Escape(), new Indent());
-        $actual = $input([
+        $actual = $this->helpers->$method([
             'name' => 'fake-name',
             'value' => 'fake-value',
         ]);
@@ -40,28 +34,29 @@ class InputFieldTest extends HtmlHelperTest
     public function provideTypes()
     {
         return [
-            [CheckboxField::class, 'checkbox'],
-            [ColorField::class, 'color'],
-            [DateField::class, 'date'],
-            [DatetimeField::class, 'datetime'],
-            [DatetimeLocalField::class, 'datetime-local'],
-            [EmailField::class, 'email'],
-            [FileField::class, 'file'],
-            [HiddenField::class, 'hidden'],
-            [ImageButton::class, 'image'],
-            [MonthField::class, 'month'],
-            [NumberField::class, 'number'],
-            [PasswordField::class, 'password'],
-            [RadioField::class, 'radio'],
-            [RangeField::class, 'range'],
-            [ResetButton::class, 'reset'],
-            [SearchField::class, 'search'],
-            [SubmitButton::class, 'submit'],
-            [TelField::class, 'tel'],
-            [TextField::class, 'text'],
-            [TimeField::class, 'time'],
-            [UrlField::class, 'url'],
-            [WeekField::class, 'week'],
+            ['button', 'button'],
+            ['checkboxField', 'checkbox'],
+            ['colorField', 'color'],
+            ['dateField', 'date'],
+            ['datetimeField', 'datetime'],
+            ['datetimeLocalField', 'datetime-local'],
+            ['emailField', 'email'],
+            ['fileField', 'file'],
+            ['hiddenField', 'hidden'],
+            ['imageButton', 'image'],
+            ['monthField', 'month'],
+            ['numberField', 'number'],
+            ['passwordField', 'password'],
+            ['radioField', 'radio'],
+            ['rangeField', 'range'],
+            ['resetButton', 'reset'],
+            ['searchField', 'search'],
+            ['submitButton', 'submit'],
+            ['telField', 'tel'],
+            ['textField', 'text'],
+            ['timeField', 'time'],
+            ['urlField', 'url'],
+            ['weekField', 'week'],
         ];
     }
 }

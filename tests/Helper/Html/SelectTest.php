@@ -5,7 +5,7 @@ class SelectTest extends HtmlHelperTest
 {
     public function test()
     {
-        $actual = $this->helper([
+        $actual = $this->helpers->select([
             'name' => 'field_name',
             'value' => 'opt5',
             'placeholder' => 'Pick One',
@@ -48,7 +48,7 @@ class SelectTest extends HtmlHelperTest
 
     public function testMultiple()
     {
-        $actual = $this->helper([
+        $actual = $this->helpers->select([
             'name' => 'field_name',
             'value' => ['opt2', 'opt5', 'opt8'],
             'multiple' => true,

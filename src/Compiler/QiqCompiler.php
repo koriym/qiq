@@ -10,8 +10,6 @@ use SplFileInfo;
 
 class QiqCompiler implements Compiler
 {
-    protected array $cached = [];
-
     protected string $cachePath;
 
     public function __construct(string $cachePath = null)
@@ -22,10 +20,6 @@ class QiqCompiler implements Compiler
 
     public function __invoke(string $source) : string
     {
-        if (isset($this->cached[$source])) {
-            return $this->cached[$source];
-        }
-
         $append = (PHP_OS_FAMILY === 'Windows')
             ? substr($source, 2)
             : $source;
@@ -61,8 +55,6 @@ class QiqCompiler implements Compiler
                 unlink($file->getPathname());
             }
         }
-
-        $this->cached = [];
     }
 
     protected function isCompiled(string $source, string $cached) : bool
@@ -106,7 +98,6 @@ class QiqCompiler implements Compiler
         }
 
         file_put_contents($cached, $code);
-        $this->cached[$source] = $cached;
     }
 
     protected function embrace(string $part) : string

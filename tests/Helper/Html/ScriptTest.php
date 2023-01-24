@@ -5,7 +5,7 @@ class ScriptTest extends HtmlHelperTest
 {
     public function test()
     {
-        $actual = $this->helper('script.js');
+        $actual = $this->helpers->script('script.js');
         $expect = '<script src="script.js" type="text/javascript"></script>';
         $this->assertSame($expect, $actual);
     }

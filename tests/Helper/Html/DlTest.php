@@ -5,7 +5,7 @@ class DlTest extends HtmlHelperTest
 {
     public function test()
     {
-        $actual = $this->helper(
+        $actual = $this->helpers->dl(
             [
                 'foo' => 'Foo Def',
                 'bar' => [
@@ -33,7 +33,7 @@ class DlTest extends HtmlHelperTest
 
         $this->assertSame($expect, $actual);
 
-        $actual = $this->helper([]);
+        $actual = $this->helpers->dl([]);
         $expect = '';
         $this->assertSame($expect, $actual);
     }

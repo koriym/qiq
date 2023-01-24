@@ -5,7 +5,7 @@ class UlTest extends HtmlHelperTest
 {
     public function test()
     {
-        $actual = $this->helper(
+        $actual = $this->helpers->ul(
             [
                 '>foo',
                 '>bar',
@@ -26,7 +26,7 @@ class UlTest extends HtmlHelperTest
 
         $this->assertSame($expect, $actual);
 
-        $actual = $this->helper([]);
+        $actual = $this->helpers->ul([]);
         $expect = '';
         $this->assertSame($expect, $actual);
     }

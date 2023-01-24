@@ -2,6 +2,7 @@
 namespace Qiq;
 
 use ParseError;
+use Qiq\Compiler\Compiler;
 
 class TemplateTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,11 +25,15 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         unset($this->template->foo);
         $this->assertFalse(isset($this->template->foo));
+
+        $actual = $this->template->h('foo & bar');
+        $this->assertSame('foo &amp; bar', $actual);
     }
 
     public function testGetters()
     {
         $this->assertInstanceOf(Catalog::class, $this->template->getCatalog());
+        $this->assertInstanceOf(Compiler::class, $this->template->getCompiler());
         $this->assertInstanceOf(Helpers::class, $this->template->getHelpers());
     }
 

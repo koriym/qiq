@@ -9,7 +9,7 @@ class LabelTest extends HtmlHelperTest
             'for' => 'bar',
             'class' => 'zim'
         ];
-        $actual = $this->helper('Foo', $attr);
+        $actual = $this->helpers->label('Foo', $attr);
         $expect = '<label for="bar" class="zim">Foo</label>';
         $this->assertSame($actual, $expect);
     }

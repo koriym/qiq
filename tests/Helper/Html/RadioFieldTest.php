@@ -5,7 +5,7 @@ class RadioFieldTest extends HtmlHelperTest
 {
     public function test()
     {
-        $actual = $this->helper([
+        $actual = $this->helpers->radioField([
             'name' => 'foo',
             'value' => 'no',
             '_default' => '',

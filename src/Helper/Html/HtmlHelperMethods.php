@@ -91,12 +91,6 @@ trait HtmlHelperMethods
             ->__invoke($attr);
     }
 
-    public function escape() : Escape
-    {
-        return $this
-            ->get(Escape::class);
-    }
-
     public function fileField(array $attr) : string
     {
         return $this
