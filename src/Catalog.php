@@ -9,6 +9,10 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 
+/**
+ * @todo add back clear() to clear the compiled files *and* the $found property?
+ * well $found is the *source* template, not the compiled one.
+ */
 class Catalog
 {
     protected array $paths = [];

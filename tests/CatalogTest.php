@@ -11,9 +11,9 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp() : void
     {
-        $this->cachePath = __DIR__ . DIRECTORY_SEPARATOR . 'cache';
         $this->catalog = $this->newCatalog();
 
+        $this->cachePath = __DIR__ . DIRECTORY_SEPARATOR . 'cache';
         $this->compiler = new QiqCompiler($this->cachePath);
         $this->compiler->clear();
     }
@@ -23,13 +23,18 @@ class CatalogTest extends \PHPUnit\Framework\TestCase
         return new Catalog($paths, $extension);
     }
 
-    public function testGet()
+    public function testGetAndHas()
     {
         $this->catalog->setPaths([__DIR__ . '/templates']);
+
+        $this->assertTrue($this->catalog->has('index'));
+
         $actual = $this->catalog->get($this->compiler, 'index');
         $expect = $this->cachePath
             . str_replace('/', DIRECTORY_SEPARATOR, __DIR__ . '/templates/index.php');
         $this->assertSame($expect, $actual);
+
+        $this->assertFalse($this->catalog->has('no-such-template'));
     }
 
     public function testDoubleDots()

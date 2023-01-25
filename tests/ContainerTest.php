@@ -1,26 +1,44 @@
 <?php
 namespace Qiq;
 
-use Qiq\Helper\Html\FakeHelper;
+use Qiq\Helper\Html\FakeBroken;
+use Qiq\Helper\Html\FakeHello;
 
 class ContainerTest extends \PHPUnit\Framework\TestCase
 {
-    protected $container;
-
-    protected function setUp() : void
-    {
-        $this->container = new Container();
-    }
-
     public function test()
     {
-        $expect = FakeHelper::class;
-        $actual = $this->container->get(FakeHelper::class);
+        $container = new Container();
+
+        $expect = FakeHello::class;
+        $actual = $container->get(FakeHello::class);
         $this->assertInstanceOf($expect, $actual);
 
-        $this->assertFalse($this->container->has(NoSuchClass::class));
+        $this->assertSame("Hello World", $actual("World"));
+
+        $this->assertFalse($container->has(NoSuchClass::class));
 
         $this->expectException(Exception\ObjectNotFound::class);
-        $this->container->get(NoSuchHelper::class);
+        $container->get(NoSuchHelper::class);
+    }
+
+    public function testConfig()
+    {
+        $container = new Container([
+            FakeHello::class => [
+                'suffix' => ' !!!',
+            ]
+        ]);
+
+        $actual = $container->get(FakeHello::class);
+        $this->assertSame("Hello World !!!", $actual("World"));
+    }
+
+    public function testCannotInstantiate()
+    {
+        $container = new Container();
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage("Cannot create argument for 'Qiq\Helper\Html\FakeBroken::\$object' of type 'ArrayObject|stdClass");
+        $container->get(FakeBroken::class);
     }
 }
