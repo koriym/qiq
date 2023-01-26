@@ -100,6 +100,9 @@ class QiqTokenTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return mixed[]
+     */
     public function echoProvider() : array
     {
         return [
@@ -139,6 +142,9 @@ class QiqTokenTest extends \PHPUnit\Framework\TestCase
         $this->assertPhp($php, $qiq);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function knownProvider() : array
     {
         return [

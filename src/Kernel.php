@@ -10,6 +10,9 @@ use stdClass;
 
 abstract class Kernel implements Rendering
 {
+    /**
+     * @param string|string[] $paths
+     */
     public static function new(
         string|array $paths = [],
         string $extension = '.php',
@@ -29,12 +32,21 @@ abstract class Kernel implements Rendering
 
     private string $content = '';
 
+    /**
+     * @var array<string, mixed>
+     */
     private array $data = [];
 
     private ?string $layout = null;
 
+    /**
+     * @var string[]
+     */
     private array $sections = [];
 
+    /**
+     * @var array<array{string, string}>
+     */
     private array $sectionStack = [];
 
     private ?string $view = null;
@@ -59,6 +71,9 @@ abstract class Kernel implements Rendering
         return $this->render($layout);
     }
 
+    /**
+     * @param mixed[] $args
+     */
     public function __call(string $func, array $args): mixed
     {
         return $this->helpers->$func(...$args);
@@ -69,21 +84,33 @@ abstract class Kernel implements Rendering
         $this->helpers->setIndent($base);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function setData(array|stdClass $data) : void
     {
         $this->data = (array) $data;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function addData(array|stdClass $data) : void
     {
         $this->data = array_replace($this->data, (array) $data);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getData() : array
     {
         return $this->data;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function &refData() : array
     {
         return $this->data;
@@ -167,6 +194,10 @@ abstract class Kernel implements Rendering
 
     public function endSection() : void
     {
+        if (empty($this->sectionStack)) {
+            return;
+        }
+
         list($func, $name) = array_pop($this->sectionStack);
         $buffer = (string) ob_get_clean();
 
@@ -187,6 +218,9 @@ abstract class Kernel implements Rendering
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     abstract public function render(
         string $__NAME__,
         array $__LOCAL__ = []

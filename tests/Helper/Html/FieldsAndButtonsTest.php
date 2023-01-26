@@ -31,6 +31,9 @@ class FieldsAndButtonsTest extends HtmlHelperTest
         $this->assertSame($expect, $actual);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function provideTypes() : array
     {
         return [
