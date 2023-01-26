@@ -3,19 +3,20 @@ namespace Qiq;
 
 use ParseError;
 use Qiq\Compiler\Compiler;
+use Qiq\Helper\Html\HtmlHelpers;
 
 class TemplateTest extends \PHPUnit\Framework\TestCase
 {
-    protected $template;
+    protected FakeTemplate $template;
 
     protected function setUp() : void
     {
-        $this->template = Template::new();
+        $this->template = FakeTemplate::new();
         $catalog = $this->template->getCatalog();
         $catalog->setPaths([__DIR__ . '/templates']);
     }
 
-    public function testMagicMethods()
+    public function testMagicMethods() : void
     {
         $this->assertFalse(isset($this->template->foo));
 
@@ -30,14 +31,14 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('foo &amp; bar', $actual);
     }
 
-    public function testGetters()
+    public function testGetters() : void
     {
         $this->assertInstanceOf(Catalog::class, $this->template->getCatalog());
         $this->assertInstanceOf(Compiler::class, $this->template->getCompiler());
         $this->assertInstanceOf(Helpers::class, $this->template->getHelpers());
     }
 
-    public function testSetIndent()
+    public function testSetIndent() : void
     {
         $container = new Container();
         $indent = $container->get(Indent::class);
@@ -50,7 +51,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testSetAddAndGetData()
+    public function testSetAddAndGetData() : void
     {
         $data = ['foo' => 'bar'];
         $this->template->setData($data);
@@ -63,7 +64,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testInvokeOneStep()
+    public function testInvokeOneStep() : void
     {
         $this->template->setData([
             'name' => 'Index',
@@ -75,7 +76,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testInvokeTwoStep()
+    public function testInvokeTwoStep() : void
     {
         // also tests that "assigned" vars are shared
         $this->template->setData([
@@ -89,7 +90,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testPartial()
+    public function testPartial() : void
     {
         // also tests that "local" vars are not shared
         $this->template->setView('master');
@@ -101,7 +102,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testSections()
+    public function testSections() : void
     {
         $this->template->setView('sections');
         $actual = ($this->template)();
@@ -111,7 +112,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testException()
+    public function testException() : void
     {
         $this->template->setView('exception');
         $this->expectException(ParseError::class);

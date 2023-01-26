@@ -3,7 +3,7 @@ namespace Qiq\Helper\Html;
 
 class CheckboxFieldTest extends HtmlHelperTest
 {
-    public function test()
+    public function test() : void
     {
         $actual = $this->helpers->checkboxField([
             'name' => 'foo',
@@ -24,7 +24,7 @@ class CheckboxFieldTest extends HtmlHelperTest
         $this->assertSame($expect, $actual);
     }
 
-    public function testSingleOption()
+    public function testSingleOption() : void
     {
         $actual = $this->helpers->checkboxField([
             'name' => 'foo',
@@ -41,7 +41,7 @@ class CheckboxFieldTest extends HtmlHelperTest
         $this->assertSame($expect, $actual);
     }
 
-    public function testScalarChecked()
+    public function testScalarChecked() : void
     {
         $actual = $this->helpers->checkboxField([
             'name' => 'foo',

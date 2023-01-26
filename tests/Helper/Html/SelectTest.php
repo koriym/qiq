@@ -3,7 +3,7 @@ namespace Qiq\Helper\Html;
 
 class SelectTest extends HtmlHelperTest
 {
-    public function test()
+    public function test() : void
     {
         $actual = $this->helpers->select([
             'name' => 'field_name',
@@ -46,7 +46,7 @@ class SelectTest extends HtmlHelperTest
         $this->assertSame($expect, $actual);
     }
 
-    public function testMultiple()
+    public function testMultiple() : void
     {
         $actual = $this->helpers->select([
             'name' => 'field_name',

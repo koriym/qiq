@@ -3,7 +3,7 @@ namespace Qiq\Helper\Html;
 
 class RadioFieldTest extends HtmlHelperTest
 {
-    public function test()
+    public function test() : void
     {
         $actual = $this->helpers->radioField([
             'name' => 'foo',

@@ -6,7 +6,7 @@ use Qiq\Helper\Html\FakeHello;
 
 class ContainerTest extends \PHPUnit\Framework\TestCase
 {
-    public function test()
+    public function test() : void
     {
         $container = new Container();
 
@@ -16,13 +16,13 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame("Hello World", $actual("World"));
 
-        $this->assertFalse($container->has(NoSuchClass::class));
+        $this->assertFalse($container->has(NoSuchClass::class)); // @phpstan-ignore-line
 
         $this->expectException(Exception\ObjectNotFound::class);
-        $container->get(NoSuchHelper::class);
+        $container->get(NoSuchHelper::class); // @phpstan-ignore-line
     }
 
-    public function testConfig()
+    public function testConfig() : void
     {
         $container = new Container([
             FakeHello::class => [
@@ -34,7 +34,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame("Hello World !!!", $actual("World"));
     }
 
-    public function testCannotInstantiate()
+    public function testCannotInstantiate() : void
     {
         $container = new Container();
         $this->expectException(\RuntimeException::class);

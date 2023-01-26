@@ -3,7 +3,7 @@ namespace Qiq\Helper\Html;
 
 class ImageTest extends HtmlHelperTest
 {
-    public function test()
+    public function test() : void
     {
         $src = '/images/example.gif';
         $actual = $this->helpers->image($src);

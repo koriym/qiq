@@ -1,4 +1,6 @@
 <?php
+/** @var Qiq\FakeTemplate $this */
+
 echo ($this->hasSection('main') ? 'true' : 'false') . PHP_EOL;
 
 $this->setSection('main');

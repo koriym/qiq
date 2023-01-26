@@ -3,7 +3,7 @@ namespace Qiq\Helper\Html;
 
 class AnchorTest extends HtmlHelperTest
 {
-    public function test()
+    public function test() : void
     {
         $actual = $this->helpers->anchor('/path/to/script.php', 'this');
         $expect = '<a href="/path/to/script.php">this</a>';

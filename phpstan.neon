@@ -1,7 +1,11 @@
 parameters:
     level: max
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
     paths:
         - src
-        - tests/templates/static-analysis.php
+        - tests
+    excludePaths:
+        - tests/templates/exception.php
     ignoreErrors:
         - "#Unsafe usage of new static#"

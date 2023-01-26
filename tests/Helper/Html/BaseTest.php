@@ -3,7 +3,7 @@ namespace Qiq\Helper\Html;
 
 class BaseTest extends HtmlHelperTest
 {
-    public function test()
+    public function test() : void
     {
         $href = '/path/to/base';
         $actual = $this->helpers->base($href);

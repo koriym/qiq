@@ -6,9 +6,9 @@ use Qiq\Indent;
 
 abstract class HtmlHelperTest extends \PHPUnit\Framework\TestCase
 {
-    protected $helpers;
+    protected HtmlHelpers $helpers;
 
-    protected $container;
+    protected Container $container;
 
     protected function setUp() : void
     {

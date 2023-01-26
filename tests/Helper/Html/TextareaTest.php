@@ -3,7 +3,7 @@ namespace Qiq\Helper\Html;
 
 class TextareaTest extends HtmlHelperTest
 {
-    public function test()
+    public function test() : void
     {
         $actual = $this->helpers->textarea([
             'name' => 'field',

@@ -3,7 +3,7 @@ namespace Qiq\Helper\Html;
 
 class ItemsTest extends HtmlHelperTest
 {
-    public function test()
+    public function test() : void
     {
         $actual = $this->helpers->items([
             '>foo',

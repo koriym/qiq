@@ -12,13 +12,14 @@ class QiqTokenTest extends \PHPUnit\Framework\TestCase
         $this->template = Template::new();
     }
 
-    protected function assertPhp(string $php, string $qiq)
+    protected function assertPhp(string $php, string $qiq) : void
     {
         $token = QiqToken::new($qiq);
-        $this->assertSame($php, $token->compile($this->template));
+        assert($token instanceof QiqToken);
+        $this->assertSame($php, $token->compile());
     }
 
-    public function testBadToken()
+    public function testBadToken() : void
     {
         $this->assertNull(QiqToken::new('{ not a token }'));
     }

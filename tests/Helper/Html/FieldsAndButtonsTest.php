@@ -5,7 +5,7 @@ use Qiq\Indent;
 
 class FieldsAndButtonsTest extends HtmlHelperTest
 {
-    public function testInputField()
+    public function testInputField() : void
     {
         $actual = $this->helpers->inputField([
             'type' => 'fake',
@@ -21,7 +21,7 @@ class FieldsAndButtonsTest extends HtmlHelperTest
     /**
      * @dataProvider provideTypes
      */
-    public function testTypes(string $method, string $type)
+    public function testTypes(string $method, string $type) : void
     {
         $actual = $this->helpers->$method([
             'name' => 'fake-name',
@@ -31,7 +31,7 @@ class FieldsAndButtonsTest extends HtmlHelperTest
         $this->assertSame($expect, $actual);
     }
 
-    public function provideTypes()
+    public function provideTypes() : array
     {
         return [
             ['button', 'button'],

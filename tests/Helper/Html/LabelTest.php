@@ -3,7 +3,7 @@ namespace Qiq\Helper\Html;
 
 class LabelTest extends HtmlHelperTest
 {
-    public function test()
+    public function test() : void
     {
         $attr = [
             'for' => 'bar',
