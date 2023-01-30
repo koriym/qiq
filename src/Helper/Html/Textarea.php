@@ -5,9 +5,13 @@ namespace Qiq\Helper\Html;
 
 class Textarea extends TagHelper
 {
+    /**
+     * @param array<string, string|string[]> $attr
+     */
     public function __invoke(array $attr) : string
     {
         $text = $attr['value'] ?? '';
+        assert(is_string($text));
         unset($attr['value']);
         return $this->fullTag('textarea', $attr, $text);
     }

@@ -5,6 +5,9 @@ namespace Qiq\Helper\Html;
 
 class LinkStylesheet extends TagHelper
 {
+    /**
+     * @param array<string, string|string[]> $attr
+     */
     public function __invoke(string $href, array $attr = []) : string
     {
         $base = [

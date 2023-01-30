@@ -15,6 +15,9 @@ class Escape
         $this->escaper = new Escaper($encoding);
     }
 
+    /**
+     * @param null|bool|int|float|string|Stringable|array<string, null|bool|string|string[]> $raw
+     */
     public function a(null|bool|int|float|string|Stringable|array $raw) : string
     {
         if (! is_array($raw)) {

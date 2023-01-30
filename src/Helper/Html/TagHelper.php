@@ -13,6 +13,9 @@ abstract class TagHelper
     ) {
     }
 
+    /**
+     * @param array<string, string|string[]> $attr
+     */
     protected function openTag(string $tag, array $attr) : string
     {
         $tag = $this->escape->a($tag);
@@ -20,6 +23,9 @@ abstract class TagHelper
         return trim("<{$tag} {$attr}") . ">";
     }
 
+    /**
+     * @param array<string, string|string[]> $attr
+     */
     protected function fullTag(string $tag, array $attr, string $text = '') : string
     {
         $raw = $attr['_raw'] ?? false;
@@ -32,6 +38,9 @@ abstract class TagHelper
         return $this->openTag($tag, $attr) . $text . "</{$tag}>";
     }
 
+    /**
+     * @param array<string, string|string[]> $attr
+     */
     protected function voidTag(string $tag, array $attr) : string
     {
         $tag = $this->escape->a($tag);

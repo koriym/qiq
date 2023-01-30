@@ -33,6 +33,9 @@ class Container implements ContainerInterface
      */
     protected array $instances = [];
 
+    /**
+     * @param array<string, array<string, mixed>> $config
+     */
     public function __construct(protected array $config = [])
     {
     }
@@ -79,6 +82,9 @@ class Container implements ContainerInterface
         return new $class(...$arguments);
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function arguments(
         string $declaringClass,
         ReflectionMethod $constructor,

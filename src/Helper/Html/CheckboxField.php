@@ -9,6 +9,9 @@ class CheckboxField extends InputField
 {
     protected string $type = 'checkbox';
 
+    /**
+     * @param array<string, string|string[]> $attr
+     */
     public function __invoke(array $attr) : string
     {
         if (! isset($attr['_options'])) {
@@ -48,6 +51,9 @@ class CheckboxField extends InputField
         return ltrim($html);
     }
 
+    /**
+     * @param array<string, string|string[]> $attr
+     */
     protected function default(array $attr, mixed $default) : string
     {
         $attr = [
@@ -59,6 +65,9 @@ class CheckboxField extends InputField
         return $this->indent->get() . $this->voidTag('input', $attr) . PHP_EOL;
     }
 
+    /**
+     * @param array<string, string|string[]> $attr
+     */
     protected function checkbox(
         array $attr,
         mixed $value,

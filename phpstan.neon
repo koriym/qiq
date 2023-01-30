@@ -3,7 +3,6 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
     paths:
         - src
-        - tests
     excludePaths:
         - tests/templates/exception.php
     ignoreErrors:

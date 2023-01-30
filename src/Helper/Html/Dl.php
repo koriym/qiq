@@ -7,6 +7,10 @@ use Qiq\Indent;
 
 class Dl extends TagHelper
 {
+    /**
+     * @param string[] $terms
+     * @param array<string, string|string[]> $attr
+     */
     public function __invoke(array $terms, array $attr = []) : string
     {
         $this->indent->level(+1);
@@ -22,6 +26,9 @@ class Dl extends TagHelper
             . $this->indent->get() . '</dl>';
     }
 
+    /**
+     * @param string[] $terms
+     */
     protected function terms(array $terms) : string
     {
         $html = '';

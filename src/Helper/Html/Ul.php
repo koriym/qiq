@@ -7,6 +7,10 @@ use Qiq\Indent;
 
 class Ul extends Items
 {
+    /**
+     * @param string[] $items
+     * @param array<string, string|string[]> $attr
+     */
     public function __invoke(array $items, array $attr = []) : string
     {
         $this->indent->level(+1);
