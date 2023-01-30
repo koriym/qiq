@@ -15,10 +15,19 @@ use SplFileInfo;
  */
 class Catalog
 {
+    /**
+     * @var array<string, string[]>
+     */
     protected array $paths = [];
 
+    /**
+     * @var string[]
+     */
     protected array $found = [];
 
+    /**
+     * @param string[] $paths
+     */
     public function __construct(
         array $paths = [],
         protected string $extension = '.php',
@@ -69,6 +78,9 @@ class Catalog
         );
     }
 
+    /**
+     * @return array<string, string[]>
+     */
     public function getPaths() : array
     {
         return $this->paths;
@@ -88,6 +100,9 @@ class Catalog
         $this->found = [];
     }
 
+    /**
+     * @param string[] $paths
+     */
     public function setPaths(array $paths) : void
     {
         $this->paths = [];
@@ -100,6 +115,9 @@ class Catalog
         $this->found = [];
     }
 
+    /**
+     * @return string[]
+     */
     public function compile(Compiler $compiler) : array
     {
         $compiled = [];
@@ -133,6 +151,9 @@ class Catalog
         return rtrim($path, DIRECTORY_SEPARATOR);
     }
 
+    /**
+     * @return array{string, string}
+     */
     protected function split(string $spec) : array
     {
         if (strpos($spec, '..') !== false) {
