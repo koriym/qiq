@@ -105,7 +105,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param string[] $terms
+     * @param stringy-array $terms
      * @param stringy-array $attr
      */
     public function dl(array $terms, array $attr = []) : string
@@ -196,7 +196,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param string[] $items
+     * @param stringy-array $items
      */
     public function items(array $items) : string
     {
@@ -290,7 +290,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param string[] $items
+     * @param stringy-array $items
      * @param stringy-array $attr
      */
     public function ol(array $items, array $attr = []) : string
@@ -431,7 +431,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param string[] $items
+     * @param stringy-array $items
      * @param stringy-array $attr
      */
     public function ul(array $items, array $attr = []) : string

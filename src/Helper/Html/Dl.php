@@ -8,7 +8,7 @@ use Qiq\Indent;
 class Dl extends TagHelper
 {
     /**
-     * @param string[] $terms
+     * @param stringy-array $terms
      * @param stringy-array $attr
      */
     public function __invoke(array $terms, array $attr = []) : string
@@ -27,7 +27,7 @@ class Dl extends TagHelper
     }
 
     /**
-     * @param string[] $terms
+     * @param stringy-array $terms
      */
     protected function terms(array $terms) : string
     {

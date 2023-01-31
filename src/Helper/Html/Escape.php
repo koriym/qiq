@@ -5,8 +5,6 @@ namespace Qiq\Helper\Html;
 
 use Laminas\Escaper\Escaper;
 
-// escapable string
-// escapable string array
 class Escape
 {
     protected Escaper $escaper;

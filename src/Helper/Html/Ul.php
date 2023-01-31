@@ -8,7 +8,7 @@ use Qiq\Indent;
 class Ul extends Items
 {
     /**
-     * @param string[] $items
+     * @param stringy-array $items
      * @param stringy-array $attr
      */
     public function __invoke(array $items, array $attr = []) : string
