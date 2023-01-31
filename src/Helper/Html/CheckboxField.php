@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace Qiq\Helper\Html;
 
 use Qiq\Indent;
+use Stringable;
 
 class CheckboxField extends InputField
 {
     protected string $type = 'checkbox';
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function __invoke(array $attr) : string
     {
@@ -25,7 +26,10 @@ class CheckboxField extends InputField
             '_options' => [],
         ];
 
+        /** @var stringy-array */
         $attr = array_merge($base, $attr);
+        settype($attr['name'], 'string');
+        assert(is_string($attr['name']));
 
         $options = (array) $attr['_options'];
         unset($attr['_options']);
@@ -35,7 +39,7 @@ class CheckboxField extends InputField
         if (array_key_exists('_default', $attr)) {
             $default = $attr['_default'];
             unset($attr['_default']);
-            $html .= $this->default($attr, $default);
+            $html .= $this->default($attr['name'], $default);
         }
 
         $checked = $attr['value'];
@@ -45,20 +49,23 @@ class CheckboxField extends InputField
         }
 
         foreach ($options as $value => $label) {
-            $html .= $this->checkbox($attr, $value, $label, $checked);
+            $html .= $this->checkbox(
+                $attr,
+                (string) $value,
+                (string) $label,
+                $checked
+            );
         }
 
         return ltrim($html);
     }
 
-    /**
-     * @param array<string, string|string[]> $attr
-     */
-    protected function default(array $attr, mixed $default) : string
+    protected function default(string $name, mixed $default) : string
     {
+        /** @var stringy-array */
         $attr = [
             'type' => 'hidden',
-            'name' => $attr['name'],
+            'name' => $name,
             'value' => $default,
         ];
 
@@ -66,11 +73,11 @@ class CheckboxField extends InputField
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     protected function checkbox(
         array $attr,
-        mixed $value,
+        string $value,
         string $label,
         mixed $checked,
     ) : string

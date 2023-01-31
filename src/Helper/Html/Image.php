@@ -6,7 +6,7 @@ namespace Qiq\Helper\Html;
 class Image extends TagHelper
 {
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function __invoke(string $src, array $attr = []) : string
     {

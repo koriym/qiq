@@ -8,9 +8,9 @@ use Stringable;
 trait HtmlHelperMethods
 {
     /**
-     * @param null|bool|int|float|string|Stringable|array<string, null|bool|string|string[]> $raw
+     * @param stringy-or-array $raw
      */
-    public function a(null|bool|int|float|string|Stringable|array $raw) : string
+    public function a(mixed $raw) : string
     {
         return $this
             ->get(Escape::class)
@@ -18,7 +18,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function anchor(string $href, string $text, array $attr = []) : string
     {
@@ -35,7 +35,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function button(array $attr) : string
     {
@@ -44,7 +44,10 @@ trait HtmlHelperMethods
             ->__invoke($attr);
     }
 
-    public function c(null|bool|int|float|string|Stringable $raw) : string
+    /**
+     * @param stringy $raw
+     */
+    public function c(mixed $raw) : string
     {
         return $this
             ->get(Escape::class)
@@ -52,7 +55,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function checkboxField(array $attr) : string
     {
@@ -62,7 +65,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function colorField(array $attr) : string
     {
@@ -72,7 +75,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function dateField(array $attr) : string
     {
@@ -82,7 +85,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function datetimeField(array $attr) : string
     {
@@ -92,7 +95,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function datetimeLocalField(array $attr) : string
     {
@@ -103,7 +106,7 @@ trait HtmlHelperMethods
 
     /**
      * @param string[] $terms
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function dl(array $terms, array $attr = []) : string
     {
@@ -113,7 +116,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function emailField(array $attr) : string
     {
@@ -123,7 +126,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function fileField(array $attr) : string
     {
@@ -133,7 +136,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function form(array $attr) : string
     {
@@ -142,7 +145,10 @@ trait HtmlHelperMethods
             ->__invoke($attr);
     }
 
-    public function h(null|bool|int|float|string|Stringable $raw) : string
+    /**
+     * @param stringy $raw
+     */
+    public function h(mixed $raw) : string
     {
         return $this
             ->get(Escape::class)
@@ -150,7 +156,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function hiddenField(array $attr) : string
     {
@@ -160,7 +166,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function image(string $src, array $attr = []) : string
     {
@@ -170,7 +176,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function imageButton(array $attr) : string
     {
@@ -180,7 +186,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function inputField(array $attr) : string
     {
@@ -199,7 +205,10 @@ trait HtmlHelperMethods
             ->__invoke($items);
     }
 
-    public function j(null|bool|int|float|string|Stringable $raw) : string
+    /**
+     * @param stringy $raw
+     */
+    public function j(mixed $raw) : string
     {
         return $this
             ->get(Escape::class)
@@ -207,7 +216,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function label(string $text, array $attr = []) : string
     {
@@ -217,7 +226,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function link(string $rel, string $href, array $attr = []) : string
     {
@@ -227,7 +236,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function linkStylesheet(string $href, array $attr = []) : string
     {
@@ -237,7 +246,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function meta(array $attr) : string
     {
@@ -261,7 +270,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function monthField(array $attr) : string
     {
@@ -271,7 +280,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function numberField(array $attr) : string
     {
@@ -282,7 +291,7 @@ trait HtmlHelperMethods
 
     /**
      * @param string[] $items
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function ol(array $items, array $attr = []) : string
     {
@@ -292,7 +301,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function passwordField(array $attr) : string
     {
@@ -302,7 +311,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function radioField(array $attr) : string
     {
@@ -312,7 +321,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function rangeField(array $attr) : string
     {
@@ -322,7 +331,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function resetButton(array $attr) : string
     {
@@ -332,7 +341,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function script(string $src, array $attr = []) : string
     {
@@ -342,7 +351,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function searchField(array $attr) : string
     {
@@ -352,7 +361,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function select(array $attr) : string
     {
@@ -362,7 +371,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function submitButton(array $attr) : string
     {
@@ -372,7 +381,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function telField(array $attr) : string
     {
@@ -382,7 +391,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function textarea(array $attr) : string
     {
@@ -392,7 +401,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function textField(array $attr) : string
     {
@@ -402,7 +411,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function timeField(array $attr) : string
     {
@@ -411,7 +420,10 @@ trait HtmlHelperMethods
             ->__invoke($attr);
     }
 
-    public function u(null|bool|int|float|string|Stringable $raw) : string
+    /**
+     * @param stringy $raw
+     */
+    public function u(mixed $raw) : string
     {
         return $this
             ->get(Escape::class)
@@ -420,7 +432,7 @@ trait HtmlHelperMethods
 
     /**
      * @param string[] $items
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function ul(array $items, array $attr = []) : string
     {
@@ -430,7 +442,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function urlField(array $attr) : string
     {
@@ -440,7 +452,7 @@ trait HtmlHelperMethods
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function weekField(array $attr) : string
     {

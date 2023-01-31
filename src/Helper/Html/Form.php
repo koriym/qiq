@@ -6,7 +6,7 @@ namespace Qiq\Helper\Html;
 class Form extends TagHelper
 {
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function __invoke(array $attr = []) : string
     {

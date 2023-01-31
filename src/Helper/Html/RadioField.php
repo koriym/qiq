@@ -10,7 +10,7 @@ class RadioField extends InputField
     protected string $type = 'radio';
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function __invoke(array $attr) : string
     {
@@ -47,9 +47,6 @@ class RadioField extends InputField
         return ltrim($html);
     }
 
-    /**
-     * @param array<string, string|string[]> $attr
-     */
     protected function default(array $attr, mixed $default) : string
     {
         $attr = [
@@ -61,9 +58,6 @@ class RadioField extends InputField
         return $this->indent->get() . $this->voidTag('input', $attr) . PHP_EOL;
     }
 
-    /**
-     * @param array<string, string|string[]> $attr
-     */
     protected function radio(array $attr, mixed $value, string $label, mixed $checked) : string
     {
         $attr['type'] = 'radio';

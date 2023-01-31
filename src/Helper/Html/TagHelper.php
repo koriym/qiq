@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Qiq\Helper\Html;
 
 use Qiq\Indent;
+use Stringable;
 
 abstract class TagHelper
 {
@@ -14,7 +15,7 @@ abstract class TagHelper
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     protected function openTag(string $tag, array $attr) : string
     {
@@ -24,7 +25,7 @@ abstract class TagHelper
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     protected function fullTag(string $tag, array $attr, string $text = '') : string
     {
@@ -39,7 +40,7 @@ abstract class TagHelper
     }
 
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     protected function voidTag(string $tag, array $attr) : string
     {

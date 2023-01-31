@@ -8,7 +8,7 @@ use Qiq\Indent;
 class Select extends TagHelper
 {
     /**
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function __invoke(array $attr) : string
     {

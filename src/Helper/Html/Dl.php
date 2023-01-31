@@ -9,7 +9,7 @@ class Dl extends TagHelper
 {
     /**
      * @param string[] $terms
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function __invoke(array $terms, array $attr = []) : string
     {

@@ -9,7 +9,7 @@ class Ul extends Items
 {
     /**
      * @param string[] $items
-     * @param array<string, string|string[]> $attr
+     * @param stringy-array $attr
      */
     public function __invoke(array $items, array $attr = []) : string
     {

@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace Qiq\Helper\Html;
 
 use Laminas\Escaper\Escaper;
-use Stringable;
 
+// escapable string
+// escapable string array
 class Escape
 {
     protected Escaper $escaper;
@@ -16,9 +17,9 @@ class Escape
     }
 
     /**
-     * @param null|bool|int|float|string|Stringable|array<string, null|bool|string|string[]> $raw
+     * @param stringy-or-array $raw
      */
-    public function a(null|bool|int|float|string|Stringable|array $raw) : string
+    public function a(mixed $raw) : string
     {
         if (! is_array($raw)) {
             return $this->escaper->escapeHtmlAttr((string) $raw);
@@ -33,7 +34,7 @@ class Escape
             }
 
             // get rid of extra spaces in the key
-            $key = trim($key);
+            $key = trim((string) $key);
 
             // concatenate and space-separate multiple values
             if (is_array($val)) {
@@ -58,22 +59,34 @@ class Escape
         return rtrim($esc);
     }
 
-    public function c(null|bool|int|float|string|Stringable $raw) : string
+    /**
+     * @param stringy $raw
+     */
+    public function c(mixed $raw) : string
     {
         return $this->escaper->escapeCss((string) $raw);
     }
 
-    public function h(null|bool|int|float|string|Stringable $raw) : string
+    /**
+     * @param stringy $raw
+     */
+    public function h(mixed $raw) : string
     {
         return $this->escaper->escapeHtml((string) $raw);
     }
 
-    public function j(null|bool|int|float|string|Stringable $raw) : string
+    /**
+     * @param stringy $raw
+     */
+    public function j(mixed $raw) : string
     {
         return $this->escaper->escapeJs((string) $raw);
     }
 
-    public function u(null|bool|int|float|string|Stringable $raw) : string
+    /**
+     * @param stringy $raw
+     */
+    public function u(mixed $raw) : string
     {
         return $this->escaper->escapeUrl((string) $raw);
     }
