@@ -16,11 +16,18 @@ class Select extends TagHelper
             'name' => null,
         ];
 
+        /** @var stringy-array */
         $attr = array_merge($base, $attr);
+
+        settype($attr['name'], 'string');
+        assert(is_string($attr['name']));
 
         $placeholder = $attr['placeholder'] ?? null;
         unset($attr['placeholder']);
+        settype($placeholder, 'string');
+        assert(is_string($placeholder));
 
+        /** @var stringy-array */
         $options = $attr['_options'] ?? [];
         unset($attr['_options']);
 
@@ -56,6 +63,9 @@ class Select extends TagHelper
         return $html . $this->indent->get() . '</select>';
     }
 
+    /**
+     * @param stringy-array $options
+     */
     protected function options(array $options, mixed $selected) : string
     {
         $html = '';
@@ -87,6 +97,9 @@ class Select extends TagHelper
         return $this->indent->get() . "<option {$attr}>{$label}</option>" . PHP_EOL;
     }
 
+    /**
+     * @param stringy-array $options
+     */
     public function optgroup(int|string $label, array $options, mixed $selected) : string
     {
         $attr = $this->escape->a(['label' => $label]);
