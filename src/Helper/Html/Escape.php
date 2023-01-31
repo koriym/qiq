@@ -17,7 +17,7 @@ class Escape
     }
 
     /**
-     * @param stringy-or-array $raw
+     * @param stringy|stringy-array $raw
      */
     public function a(mixed $raw) : string
     {

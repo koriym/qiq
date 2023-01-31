@@ -10,4 +10,3 @@ parameters:
     typeAliases:
         stringy: 'null|bool|int|float|string|\Stringable'
         stringy-array: 'array<int|string, stringy|array<int|string, stringy>>'
-        stringy-or-array: 'stringy|stringy-array'

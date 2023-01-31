@@ -22,10 +22,9 @@ class Select extends TagHelper
         settype($attr['name'], 'string');
         assert(is_string($attr['name']));
 
+        /** @var stringy */
         $placeholder = $attr['placeholder'] ?? null;
         unset($attr['placeholder']);
-        settype($placeholder, 'string');
-        assert(is_string($placeholder));
 
         /** @var stringy-array */
         $options = $attr['_options'] ?? [];
@@ -78,7 +77,7 @@ class Select extends TagHelper
     }
 
     /**
-     * @param stringy-or-array $val
+     * @param stringy|stringy-array $val
      */
     protected function option(int|string $key, mixed $val, mixed $selected) : string
     {

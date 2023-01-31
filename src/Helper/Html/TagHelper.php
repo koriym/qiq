@@ -26,8 +26,9 @@ abstract class TagHelper
 
     /**
      * @param stringy-array $attr
+     * @param stringy $text
      */
-    protected function fullTag(string $tag, array $attr, string $text = '') : string
+    protected function fullTag(string $tag, array $attr, mixed $text = '') : string
     {
         $raw = $attr['_raw'] ?? false;
         unset($attr['_raw']);

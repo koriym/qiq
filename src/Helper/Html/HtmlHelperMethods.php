@@ -8,7 +8,7 @@ use Stringable;
 trait HtmlHelperMethods
 {
     /**
-     * @param stringy-or-array $raw
+     * @param stringy|stringy-array $raw
      */
     public function a(mixed $raw) : string
     {
