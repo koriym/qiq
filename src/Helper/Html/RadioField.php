@@ -18,7 +18,6 @@ class RadioField extends InputField
             return parent::__invoke($attr);
         }
 
-        /** @var stringy-array */
         $base = [
             'type' => 'radio',
             'name' => null,
@@ -26,6 +25,7 @@ class RadioField extends InputField
             '_options' => [],
         ];
 
+        /** @var stringy-array */
         $attr = array_merge($base, $attr);
 
         settype($attr['name'], 'string');
@@ -45,7 +45,12 @@ class RadioField extends InputField
         $checked = $attr['value'];
 
         foreach ($options as $value => $label) {
-            $html .= $this->radio($attr, (string) $value, (string) $label, $checked);
+            $html .= $this->radio(
+                $attr,
+                (string) $value,
+                (string) $label,
+                $checked
+            );
         }
 
         return ltrim($html);
@@ -53,6 +58,7 @@ class RadioField extends InputField
 
     protected function default(string $name, mixed $default) : string
     {
+        /** @var stringy-array */
         $attr = [
             'type' => 'hidden',
             'name' => $name,
@@ -67,7 +73,7 @@ class RadioField extends InputField
      */
     protected function radio(
         array $attr,
-        mixed $value,
+        string $value,
         string $label,
         mixed $checked
     ) : string
