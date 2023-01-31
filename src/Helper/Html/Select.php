@@ -77,6 +77,9 @@ class Select extends TagHelper
         return $html;
     }
 
+    /**
+     * @param stringy-or-array $val
+     */
     protected function option(int|string $key, mixed $val, mixed $selected) : string
     {
         if (is_array($val)) {
@@ -92,7 +95,7 @@ class Select extends TagHelper
             : $attr['value'] == $selected;
 
         $attr = $this->escape->a($attr);
-        $label = $this->escape->h($val); // @phpstan-ignore-line
+        $label = $this->escape->h($val);
 
         return $this->indent->get() . "<option {$attr}>{$label}</option>" . PHP_EOL;
     }
