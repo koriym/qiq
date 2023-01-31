@@ -36,7 +36,7 @@ class Escape
 
             // concatenate and space-separate multiple values
             if (is_array($val)) {
-                $val = implode(' ', $val);
+                $val = $this->implode($val);
             }
 
             // what kind of attribute representation?
@@ -55,6 +55,24 @@ class Escape
 
         // done; remove the last space
         return rtrim($esc);
+    }
+
+    /**
+     * @param stringy-array $raw
+     */
+    protected function implode(array $raw) : string
+    {
+        $str = [];
+
+        foreach ($raw as $key => $val) {
+            if (is_array($val)) {
+                $str[] = $this->implode($val);
+            } else {
+                $str[] = (string) $val;
+            }
+        }
+
+        return implode(' ', $str);
     }
 
     /**
