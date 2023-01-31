@@ -18,6 +18,7 @@ class RadioField extends InputField
             return parent::__invoke($attr);
         }
 
+        /** @var stringy-array */
         $base = [
             'type' => 'radio',
             'name' => null,
@@ -27,6 +28,9 @@ class RadioField extends InputField
 
         $attr = array_merge($base, $attr);
 
+        settype($attr['name'], 'string');
+        assert(is_string($attr['name']));
+
         $options = (array) $attr['_options'];
         unset($attr['_options']);
 
@@ -35,30 +39,38 @@ class RadioField extends InputField
         if (array_key_exists('_default', $attr)) {
             $default = $attr['_default'];
             unset($attr['_default']);
-            $html .= $this->default($attr, $default);
+            $html .= $this->default($attr['name'], $default);
         }
 
         $checked = $attr['value'];
 
         foreach ($options as $value => $label) {
-            $html .= $this->radio($attr, $value, $label, $checked);
+            $html .= $this->radio($attr, (string) $value, (string) $label, $checked);
         }
 
         return ltrim($html);
     }
 
-    protected function default(array $attr, mixed $default) : string
+    protected function default(string $name, mixed $default) : string
     {
         $attr = [
             'type' => 'hidden',
-            'name' => $attr['name'],
+            'name' => $name,
             'value' => $default,
         ];
 
         return $this->indent->get() . $this->voidTag('input', $attr) . PHP_EOL;
     }
 
-    protected function radio(array $attr, mixed $value, string $label, mixed $checked) : string
+    /**
+     * @param stringy-array $attr
+     */
+    protected function radio(
+        array $attr,
+        mixed $value,
+        string $label,
+        mixed $checked
+    ) : string
     {
         $attr['type'] = 'radio';
         $attr['value'] = $value;

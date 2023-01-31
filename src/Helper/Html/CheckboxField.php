@@ -28,6 +28,7 @@ class CheckboxField extends InputField
 
         /** @var stringy-array */
         $attr = array_merge($base, $attr);
+
         settype($attr['name'], 'string');
         assert(is_string($attr['name']));
 
